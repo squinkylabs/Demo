@@ -41,7 +41,6 @@ struct VCO1Module : Module
     bool outputSin = false;
     bool outputPara = false;
 
-
     VCO1Module() {
         // Your module must call config from its constructor, passing in
         // how many ins, outs, etc... it has.
@@ -126,7 +125,7 @@ struct VCO1Module : Module
                 float radianPhase = phaseAccumulators[i] * 2 * M_PI;
 
                 // sin of 0..2pi will be a sinewave from -1 to 1.
-                // easy to convert to -5 to +5
+                // Easy to convert to -5 to +5
                 float sinWave = std::sin(radianPhase) * 5;
                 outputs[SIN_OUTPUT].setVoltage(sinWave, i);
             }
@@ -170,6 +169,8 @@ struct VCO1Widget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(15, 365)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 30, 365)));
 
+        // It's purely personal style whether you want to set variables like this
+        // For the position of your widgets. It's fine to do it inline also.
         float x = 50;
         float headingY = 20;
         float inputY = 75;
@@ -189,8 +190,8 @@ struct VCO1Widget : ModuleWidget {
         addOutput(createOutput<PJ301MPort>(Vec(x, sinY), module, VCO1Module::SIN_OUTPUT));
         addOutput(createOutput<PJ301MPort>(Vec(x, paraY), module, VCO1Module::PARA_OUTPUT));
     
+        // Add some quick hack labels to the panel.
         addLabel(Vec(20, headingY), "DEMO VCO1");
-
         addLabel(Vec(x-16, inputY - labelAbove), "Pitch CV");
         addLabel(Vec(x-10, knobY - labelAbove), "Pitch");
         addLabel(Vec(x-16, sawY - labelAbove), "Saw Out");
@@ -200,6 +201,9 @@ struct VCO1Widget : ModuleWidget {
 
     // Simple helper function to add test labels to the panel.
     // In a real module you would draw this on the panel itself.
+    // Labels are fine for hacking, but they are discouraged for real use.
+    // Some of the problems are that they don't draw particularly efficiently,
+    // and they don't give as much control as putting them into the panel SVG.
     Label* addLabel(const Vec& v, const char* str)
     {
         NVGcolor black = nvgRGB(0,0,0);
