@@ -132,9 +132,11 @@ struct VCO1Module : Module
             }
 
             if (outputPara) {
+                // This simple "parabolic ramp" is an example of a way one could try to 
+                // make the sawtooth sound a little different.
                 float paraWave = phaseAccumulators[i];
                 paraWave *= paraWave;
-                paraWave -= .33f;
+                paraWave -= .33f;       // subtract out the DC component (use your calculus or trial and error).
                 paraWave *= 10;
                 outputs[PARA_OUTPUT].setVoltage(paraWave, i);
             }
@@ -142,17 +144,37 @@ struct VCO1Module : Module
     }
 };
 
+/**
+ * At least in VCV 1.0, every module must have a Widget, too.
+ * The widget provides the user interface for a module.
+ * Widgets may draw to the screen, get mouse and keyboard input, etc...
+ * Widgets cannot actually process or generate audio.
+ */
 struct VCO1Widget : ModuleWidget {
     VCO1Widget(VCO1Module* module) {
+        // The widget always retains a reference to the module.
+        // you must call this function first in your widget constructor.
         setModule(module);
+
+        // Typically the panel graphic is added first, then the other 
+        // UI elements are placed on TOP.
+        // In VCV the Z-order of added children is such that later
+        // children are always higher than children added earlier.
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/vco1_panel.svg")));
 
+        // VCV modules usually have image is "screws" to make them
+        // look more like physical module. You may design your own screws, 
+        // or not use screws at all.
 		addChild(createWidget<ScrewSilver>(Vec(15, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 30, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(15, 365)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 30, 365)));
 
         float x = 30;
+
+        // Now we place the widgets that represent the inputs, outputs, controls,
+        // and lights for the module. VCO1 does not have any lights, but does have
+        // the other widgets.
         addInput(createInput<PJ301MPort>(Vec(x, 50), module, VCO1Module::CV_INPUT));
         addParam(createParam<RoundBlackKnob>(Vec(x-4, 90), module, VCO1Module::PITCH_PARAM));
         addOutput(createOutput<PJ301MPort>(Vec(x, 140), module, VCO1Module::SAW_OUTPUT));
@@ -161,4 +183,11 @@ struct VCO1Widget : ModuleWidget {
     }
 };
 
+// This mysterious line must appear for each module. The
+// name in quotes at then end is the same string that will be in 
+// plugin.json in the entry for corresponding plugin.
+
+// This line basically tells VCV Rack:
+// I'm called "demo-vco1", my module is VCO1Module, and my Widget is VCO1Widget.
+// In effect, it implements a module factory.
 Model* modelVCO1 = createModel<VCO1Module, VCO1Widget>("demo-vco1");
