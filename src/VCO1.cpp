@@ -1,10 +1,18 @@
+/**
+ * This file contains the entire implementation of the VCO1 demo module.
+ * Although it is possible to implement more than one module in a single file,
+ * it is rarely done.
+ */
 
 #include "demo-plugin.hpp"
  
-//using Module = rack::plugin::Module;
-
+// VCV has a limit of 16 channels in a polyphonic cable.
 static const int maxPolyphony = 16;
 
+/**
+ *  Every synth module must have a Module structure.
+ *  This is where all the real-time processing code goes.
+ */
 struct VCO1Module : Module
 {
     enum ParamIds {
@@ -24,29 +32,51 @@ struct VCO1Module : Module
         NUM_LIGHTS
     };
 
-   
+    float phaseAccumulators[maxPolyphony] = {0};
+    float phaseAdvance[maxPolyphony] = {0};
+    int currentPolyphony = 1;
+    int loopCounter = 0;
+    bool outputSaw = false;
+    bool outputSin = false;
+
 
     VCO1Module() {
+        // Your module must call config from its constructor, passing in
+        // how many ins, outs, etc... it has.
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
         configParam(PITCH_PARAM, 0, 10, 4, "Initial Pitch");
     }
 
+    // Every Module has a process function. This is called once every
+    // sample, and must service all the inputs and outputs of the module.
     void process(const ProcessArgs& args) override {
+
+        // There are usually some thing that don't need to be done every single sample.
+        // For example: looking at a knob position. You can save a lot of CPU if you do 
+        // this less often.
         if (loopCounter-- == 0) {
             loopCounter = 3;
             processEvery4Samples(args);
         }
+
         generateOutput();
     }
 
     void processEvery4Samples(const ProcessArgs& args) {
+        // Is is very important that you tell the output ports how
+        // many channels the should export. In a VCO it is very common
+        // to use the number of CV input channels to automatically determine the
+        // polyphony.
+        // It is also very common to always run one channel, even if there is
+        // no input. This lets the VCO generate output with no input.
         currentPolyphony = std::max(1, inputs[CV_INPUT].getChannels());
         outputs[SIN_OUTPUT].setChannels(currentPolyphony);
         outputs[SAW_OUTPUT].setChannels(currentPolyphony);
 
+        //now we are going to look at our input and parameters and
+        // save off some values for out audio processing function.
         outputSaw = outputs[SAW_OUTPUT].isConnected();
         outputSin = outputs[SIN_OUTPUT].isConnected();
-
         float pitchParam = params[PITCH_PARAM].value;
         for (int i = 0; i < currentPolyphony; ++i) {
             float pitchCV = inputs[CV_INPUT].getVoltage(i);
@@ -54,8 +84,14 @@ struct VCO1Module : Module
 
             const float q = float(log2(261.626));       // move up to C
             combinedPitch += q;
+
+            // combined pitch is in volts. Now use the pow function
+            // to convert that to a pitch. Not: there are more efficient ways
+            // to do this than use std::pow.
             const float freq = std::pow(2.f, combinedPitch);
 
+            // figure out how much to add to our ramp every cycle 
+            // to make a saw at the desired frequency.
             const float normalizedFreq = args.sampleTime * freq;
             phaseAdvance[i] = normalizedFreq;
         }
@@ -63,30 +99,35 @@ struct VCO1Module : Module
 
     void generateOutput() {
         for (int i = 0; i < currentPolyphony; ++i) {
+            // Every sample, we advance the phase of our ramp by the amount
+            // we derived from the CV and knob inputs.
             phaseAccumulators[i] += phaseAdvance[i];
             if (phaseAccumulators[i] > 1.f) {
+                // We limit our phase to the range 0..1
                 phaseAccumulators[i] -= 1.f;
             }
 
             if (outputSaw) {
+                // If the saw output it patched, turn our 0..1 ramp
+                // into a -5..+5 sawtooth. This  math is very easy!
                 float sawWave = (phaseAccumulators[i] - .5f) * 10;
                 outputs[SAW_OUTPUT].setVoltage(sawWave, i);
             }
 
             if (outputSin) {
+                // If the sin output it patched, turn our 0..1 ramp
+                // into a -5..+5 sine. This  math is less easy!
+
+                // First convert 0..1 0..2pi (convert to radian angles)
                 float radianPhase = phaseAccumulators[i] * 2 * M_PI;
+
+                // sin of 0..2pi will be a sinewave from -1 to 1.
+                // easy to convert to -5 to +5
                 float sinWave = std::sin(radianPhase) * 5;
                 outputs[SIN_OUTPUT].setVoltage(sinWave, i);
             }
         }
     }
-
-    float phaseAccumulators[maxPolyphony] = {0};
-    float phaseAdvance[maxPolyphony] = {0};
-    int currentPolyphony = 1;
-    int loopCounter = 0;
-    bool outputSaw = false;
-    bool outputSin = false;
 };
 
 struct VCO1Widget : ModuleWidget {
