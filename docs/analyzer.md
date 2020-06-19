@@ -28,6 +28,6 @@ A sawtooth at about 1kHz from Fundamental VCO-1 look like this:
 
 Here we see mostly what we should see. The largest line at very close to 1khz. It's the fundamental. And we can see that there are harmonics at 2k, 3k, 4k, etc... Looking at the display, we can see that the level of the harmonics falls about 6db every octave.
 
-There are some very minor anomalies, too. All the was on the left there is a "hump". This tells us there is a small amount of DC at the output.
+There are some very minor anomalies, too. All the way on the left there is a "hump". This tells us there is a small amount of DC at the output.
 
 Also we can see that above 10kHz the harmonics fall off a little faster, and there are some strange signals that are not harmonics in between 10k and 20k. But this "junk" is more than 30 decibels below the fundamental, at at a very high frequency where we can't hear so well. This distortion (actually aliasing) is probably well below the level of audibility.
