@@ -170,16 +170,45 @@ struct VCO1Widget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(15, 365)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 30, 365)));
 
-        float x = 30;
+        float x = 50;
+        float headingY = 20;
+        float inputY = 75;
+        float knobY = 130;
+        float sawY = 190;
+        float sinY = 240;
+        float paraY = 290;
+        float labelAbove = 20;
 
         // Now we place the widgets that represent the inputs, outputs, controls,
         // and lights for the module. VCO1 does not have any lights, but does have
         // the other widgets.
-        addInput(createInput<PJ301MPort>(Vec(x, 50), module, VCO1Module::CV_INPUT));
-        addParam(createParam<RoundBlackKnob>(Vec(x-4, 90), module, VCO1Module::PITCH_PARAM));
-        addOutput(createOutput<PJ301MPort>(Vec(x, 140), module, VCO1Module::SAW_OUTPUT));
-        addOutput(createOutput<PJ301MPort>(Vec(x, 170), module, VCO1Module::SIN_OUTPUT));
-        addOutput(createOutput<PJ301MPort>(Vec(x, 200), module, VCO1Module::PARA_OUTPUT));
+
+        addInput(createInput<PJ301MPort>(Vec(x, inputY), module, VCO1Module::CV_INPUT));
+        addParam(createParam<RoundBlackKnob>(Vec(x-4, knobY), module, VCO1Module::PITCH_PARAM));
+        addOutput(createOutput<PJ301MPort>(Vec(x, sawY), module, VCO1Module::SAW_OUTPUT));
+        addOutput(createOutput<PJ301MPort>(Vec(x, sinY), module, VCO1Module::SIN_OUTPUT));
+        addOutput(createOutput<PJ301MPort>(Vec(x, paraY), module, VCO1Module::PARA_OUTPUT));
+    
+        addLabel(Vec(20, headingY), "DEMO VCO1");
+
+        addLabel(Vec(x-16, inputY - labelAbove), "Pitch CV");
+        addLabel(Vec(x-10, knobY - labelAbove), "Pitch");
+        addLabel(Vec(x-16, sawY - labelAbove), "Saw Out");
+        addLabel(Vec(x-16, sinY - labelAbove), "Sin Out");
+        addLabel(Vec(x-16, paraY - labelAbove), "Para Out");
+    }
+
+    // Simple helper function to add test labels to the panel.
+    // In a real module you would draw this on the panel itself.
+    Label* addLabel(const Vec& v, const char* str)
+    {
+        NVGcolor black = nvgRGB(0,0,0);
+        Label* label = new Label();
+        label->box.pos = v;
+        label->text = str;
+        label->color = black;
+        addChild(label);
+        return label;
     }
 };
 

@@ -17,3 +17,7 @@ This Module has several reasons to exist:
 * It shows how to make a VCV Rack plugin purely in code, without using the normal python plugin creator.
 * It shows some very simple algorithm for making VCO waveforms.
 * It shows some of the pitfalls of overly simplistic DSP code.
+
+VCO1 produces three different waveforms: sine, saw, and a mutant parabolic saw. Each waveforms comes out on a different jack.
+
+Initial testing results for VCO1: [link here](./docs/vco1-first.md)
