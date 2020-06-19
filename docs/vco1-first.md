@@ -2,7 +2,7 @@
 
 ## Examine on scope
 
-Since VCO1 will always generate at least one channel of output, we can look at the output with the VCV Fundamental scope without needing to make a patch. So let's look at the different waveforms. Here VCV's Fundamental scope is uses.
+Since VCO1 will always generate at least one channel of output, we can look at the output with the VCV Fundamental scope without needing to make a patch. So let's look at the different waveforms. Here VCV's Fundamental scope is used.
 
 ![VCO1 Waveforms](./scopes.png)
 
@@ -19,4 +19,6 @@ Now let's see if it tracks at 1V/Octave like it's supposed to. Here we again use
 
 So we see that the pitch changes by an octave when the CV changes by a volt.
 
-So far, it looks like VCO1 is working perfectly. In out next session we will dig a little deeper and find some pretty bad flaws in VCO1.
+So far, it looks like VCO1 is working perfectly. In our next session we will dig a little deeper and find some pretty bad flaws in VCO1.
+
+To go directly to the next page on CPU consumption, click [here](./vco1-cpu.md)

@@ -27,3 +27,5 @@ Looking at these reading, it looks like both Bogaudio VCO's, and Demo Saw use a 
  Why has Fundamental VCO-1 gone from OK CPU usage as a monophonic VCO, too excellent polyphonic? It's because it uses the SIMD instructions of the Intel CPU to generate four voices at once. So, as might be expected, it only take twice as much CPU for VCO-1 to generate 8 voices as to generate 1. The other VCOs are acting as expected. With 8 voices they take much more CPU than 1.
 
  And then there is Demo VCO1. Very bad CPU usage generating sine, ok generating saw, but no interesting features to distinguish itself.
+
+ To go directly to the next page on using a spectrum analyzer, click [here](./analyzer.md)
