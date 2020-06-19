@@ -26,6 +26,7 @@ struct VCO1Module : Module
 	enum OutputIds {
         SAW_OUTPUT,
         SIN_OUTPUT,
+        PARA_OUTPUT,
         NUM_OUTPUTS
 	};
 	enum LightIds {
@@ -38,6 +39,7 @@ struct VCO1Module : Module
     int loopCounter = 0;
     bool outputSaw = false;
     bool outputSin = false;
+    bool outputPara = false;
 
 
     VCO1Module() {
@@ -72,11 +74,13 @@ struct VCO1Module : Module
         currentPolyphony = std::max(1, inputs[CV_INPUT].getChannels());
         outputs[SIN_OUTPUT].setChannels(currentPolyphony);
         outputs[SAW_OUTPUT].setChannels(currentPolyphony);
+        outputs[PARA_OUTPUT].setChannels(currentPolyphony);
 
         //now we are going to look at our input and parameters and
         // save off some values for out audio processing function.
         outputSaw = outputs[SAW_OUTPUT].isConnected();
         outputSin = outputs[SIN_OUTPUT].isConnected();
+        outputPara = outputs[PARA_OUTPUT].isConnected();
         float pitchParam = params[PITCH_PARAM].value;
         for (int i = 0; i < currentPolyphony; ++i) {
             float pitchCV = inputs[CV_INPUT].getVoltage(i);
@@ -126,6 +130,14 @@ struct VCO1Module : Module
                 float sinWave = std::sin(radianPhase) * 5;
                 outputs[SIN_OUTPUT].setVoltage(sinWave, i);
             }
+
+            if (outputPara) {
+                float paraWave = phaseAccumulators[i];
+                paraWave *= paraWave;
+                paraWave -= .33f;
+                paraWave *= 10;
+                outputs[PARA_OUTPUT].setVoltage(paraWave, i);
+            }
         }
     }
 };
@@ -145,6 +157,7 @@ struct VCO1Widget : ModuleWidget {
         addParam(createParam<RoundBlackKnob>(Vec(x-4, 90), module, VCO1Module::PITCH_PARAM));
         addOutput(createOutput<PJ301MPort>(Vec(x, 140), module, VCO1Module::SAW_OUTPUT));
         addOutput(createOutput<PJ301MPort>(Vec(x, 170), module, VCO1Module::SIN_OUTPUT));
+        addOutput(createOutput<PJ301MPort>(Vec(x, 200), module, VCO1Module::PARA_OUTPUT));
     }
 };
 
