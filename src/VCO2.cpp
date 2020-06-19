@@ -5,6 +5,15 @@
  */
 
 #include "demo-plugin.hpp"
+
+
+// This is a fast sine approximation function from Fundamental VCO-1
+template <typename T>
+T sin2pi_pade_05_5_4(T x) {
+	x -= 0.5f;
+	return (T(-6.283185307) * x + T(33.19863968) * simd::pow(x, 3) - T(32.44191367) * simd::pow(x, 5))
+	       / (1 + T(1.296008659) * simd::pow(x, 2) + T(0.7028072946) * simd::pow(x, 4));
+}
  
 // VCV has a limit of 16 channels in a polyphonic cable.
 static const int maxPolyphony = 16;
@@ -91,7 +100,8 @@ struct VCO2Module : Module
             // combined pitch is in volts. Now use the pow function
             // to convert that to a pitch. Not: there are more efficient ways
             // to do this than use std::pow.
-            const float freq = std::pow(2.f, combinedPitch);
+           // const float freq = std::pow(2.f, combinedPitch);
+            const float freq = rack::dsp::approxExp2_taylor5(combinedPitch);
 
             // figure out how much to add to our ramp every cycle 
             // to make a saw at the desired frequency.
@@ -122,11 +132,12 @@ struct VCO2Module : Module
                 // into a -5..+5 sine. This  math is less easy!
 
                 // First convert 0..1 0..2pi (convert to radian angles)
-                float radianPhase = phaseAccumulators[i] * 2 * M_PI;
+              //  float radianPhase = phaseAccumulators[i] * 2 * M_PI;
 
                 // sin of 0..2pi will be a sinewave from -1 to 1.
                 // Easy to convert to -5 to +5
-                float sinWave = std::sin(radianPhase) * 5;
+               // float sinWave = std::sin(radianPhase) * 5;
+                float sinWave = 5.f * sin2pi_pade_05_5_4( phaseAccumulators[i]);
                 outputs[SIN_OUTPUT].setVoltage(sinWave, i);
             }
 
