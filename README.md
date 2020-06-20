@@ -1,6 +1,6 @@
 # Demo
 
-This repo contains a VCV Rack plugin which implements one (or more) VCV RAck synthesizer modules. It is intended more as a demonstration for how to make VCV plugins than an actual useful synthesizer module.
+This repo contains a VCV Rack plugin which implements a few VCV Rack synthesizer modules. It is intended more as a demonstration for how to make VCV plugins than an actual useful synthesizer module.
 
 ## Prerequisites
 
@@ -28,7 +28,14 @@ This Module has several reasons to exist:
 
 VCO1 produces three different waveforms: sine, saw, and a mutant parabolic saw. Each waveforms comes out on a different jack.
 
+## VCO2
+
+VCO2 functions exactly the same as VCO1, but fixed the problems identified in VCO1.
+
 Initial testing results for VCO1: [link here](./docs/vco1-first.md)
+
 Looking in detail at VCO1's CPU usage: [link here](./docs/vco1-cpu.md)
+
 How to use a spectrum analyzer: [link here](./docs/analyzer.md)
+
 How does VCO1 look on the analyzer? [link here](./aliasing.md)
