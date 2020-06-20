@@ -191,7 +191,7 @@ struct VCO1Widget : ModuleWidget {
         addOutput(createOutput<PJ301MPort>(Vec(x, paraY), module, VCO1Module::PARA_OUTPUT));
     
         // Add some quick hack labels to the panel.
-        addLabel(Vec(20, headingY), "DEMO VCO1");
+        addLabel(Vec(20, headingY), "Demo VCO1");
         addLabel(Vec(x-16, inputY - labelAbove), "Pitch CV");
         addLabel(Vec(x-10, knobY - labelAbove), "Pitch");
         addLabel(Vec(x-16, sawY - labelAbove), "Saw Out");

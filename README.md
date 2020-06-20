@@ -14,7 +14,7 @@ The VCV Manual has a lot of information that is useful to plugin developers. Def
 
 To build a plugin, you must have either the VCV Plugin SDK installed correctly, or you must first build VCV itself from scratch. We always build it ourselves.
 
-## Tools needed to build DEMO
+## Tools needed to build Demo
 
 You must have an appropriate set of build tools installed. On Windows that means the MSYS2 shell. Follow the directions linked above to get this all set up.
 
@@ -49,9 +49,9 @@ Looking in detail at VCO1's CPU usage: [link here](./docs/vco1-cpu.md)
 
 How to use a spectrum analyzer: [link here](./docs/analyzer.md)
 
-How does Demo VCO1 look on the analyzer? (and introduction to aliasing) [link here](./docs/aliasing.md)
+How does Demo VCO1 look on the analyzer? (and introduction to aliasing): [link here](./docs/aliasing.md)
 
-More on measuring aliasing. [link here](./docs/aliasing2.md)
+More on measuring aliasing: [link here](./docs/aliasing2.md)
 
 Introducing Demo VCO2: [link here](./docs/vco2.md)
 
@@ -67,4 +67,4 @@ We also saw it is very easy to make a VCO that generates a huge amount of aliasi
 
 Lastly, we provided source code that can easily be re-used for someone who wants to start a pluigin "from code". The code has lots of comments in it that will hopefully make it easier for others to start writing VCV modules.
 
-For more on writing efficient plugins aside from the excellent info in the VCV manual, there is this paper we wrote over a year ago. It's badly in need of update to VCV 1.0, but it has been a popular source of info [writing efficient plugins](https://github.com/squinkylabs/SquinkyVCV/blob/master/docs/efficient-plugins.md)
+For more on writing efficient plugins aside from the excellent info in the VCV manual, there is this paper we wrote over a year ago. It's badly in need of update to VCV 1.0, but it has been a popular source of info: [writing efficient plugins](https://github.com/squinkylabs/SquinkyVCV/blob/master/docs/efficient-plugins.md)

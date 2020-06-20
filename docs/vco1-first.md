@@ -1,4 +1,4 @@
-# First test of VCO1
+# First test of Demo VCO1
 
 ## Examine on scope
 
