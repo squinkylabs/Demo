@@ -44,6 +44,8 @@ struct VCO2Module : Module
 
     float phaseAccumulators[maxPolyphony] = {0};
     float phaseAdvance[maxPolyphony] = {0};
+    dsp::MinBlepGenerator<16, 16, float> sawMinBlep[maxPolyphony];
+    dsp::MinBlepGenerator<16, 16, float> paraMinBlep[maxPolyphony];
     int currentPolyphony = 1;
     int loopCounter = 0;
     bool outputSaw = false;
@@ -120,35 +122,50 @@ struct VCO2Module : Module
                 phaseAccumulators[i] -= 1.f;
             }
 
-            if (outputSaw) {
-                // If the saw output it patched, turn our 0..1 ramp
-                // into a -5..+5 sawtooth. This  math is very easy!
-                float sawWave = (phaseAccumulators[i] - .5f) * 10;
-                outputs[SAW_OUTPUT].setVoltage(sawWave, i);
+            // Let's change our saw so that it has it's step when phase = .5.
+            // VCO used the phase as the saw, so wrapped at 0/1
+            float halfCrossing = (0.5f - (phaseAccumulators[i] -  phaseAdvance[i])) /  phaseAdvance[i];
+            bool jump = ((0 < halfCrossing) & (halfCrossing <= 1.f));
+            if (jump) {
+                float jumpPhase = halfCrossing - 1.f;
+                float jumpAmount = -2;
+                sawMinBlep[i].insertDiscontinuity(jumpPhase, jumpAmount);
             }
 
-            if (outputSin) {
-                // If the sin output it patched, turn our 0..1 ramp
-                // into a -5..+5 sine. This  math is less easy!
+            // rawSaw will go -1..1 and have the minBlep in it
+            float minBlep;
+            if (outputSaw || outputPara) {
+                minBlep = sawMinBlep[i].process();
+            }
 
-                // First convert 0..1 0..2pi (convert to radian angles)
-              //  float radianPhase = phaseAccumulators[i] * 2 * M_PI;
-
-                // sin of 0..2pi will be a sinewave from -1 to 1.
-                // Easy to convert to -5 to +5
-               // float sinWave = std::sin(radianPhase) * 5;
-                float sinWave = 5.f * sin2pi_pade_05_5_4( phaseAccumulators[i]);
-                outputs[SIN_OUTPUT].setVoltage(sinWave, i);
+            if (outputSaw) {
+                float rawSaw =  (phaseAccumulators[i] + .5f);
+                rawSaw -= std::trunc(rawSaw);
+                rawSaw = 2 * rawSaw - 1;
+                rawSaw += minBlep;
+                float sawWave = 5 * rawSaw;
+                outputs[SAW_OUTPUT].setVoltage(sawWave, i);
             }
 
             if (outputPara) {
                 // This simple "parabolic ramp" is an example of a way one could try to 
                 // make the sawtooth sound a little different.
-                float paraWave = phaseAccumulators[i];
-                paraWave *= paraWave;
-                paraWave -= .33f;       // subtract out the DC component (use your calculus or trial and error).
-                paraWave *= 10;
+
+                float paraWave = (phaseAccumulators[i] + .5f);
+                paraWave -= std::trunc(paraWave);       // now 0 ... 1
+                paraWave *= paraWave;                  // squared, but still 0..1
+                paraWave = 2 * paraWave; // now 0..2
+                paraWave += minBlep;
+                paraWave -= .33f * 2;       // subtract out the DC component (use your calculus or trial and error).
+                paraWave *= 5;
                 outputs[PARA_OUTPUT].setVoltage(paraWave, i);
+            }
+
+            if (outputSin) {
+                // If the sin output it patched, turn our 0..1 ramp
+                // into a -5..+5 sine.
+                float sinWave = 5.f * sin2pi_pade_05_5_4( phaseAccumulators[i]);
+                outputs[SIN_OUTPUT].setVoltage(sinWave, i);
             }
         }
     }
