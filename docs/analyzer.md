@@ -2,11 +2,11 @@
 
 This may be fairly basic, so feel free to skip ahead.
 
-A frequency analyzer is quite often the best way to visually examine your audio. It will tell you the volume of the audio at specific frequencies. Often this provides insights that that would be impossible to discern by looking at the waveform on a scope.
+A frequency analyzer is quite often the best way to visually examine your audio. It will tell you the volume of the audio at specific frequencies. Often this provides insights that would be impossible to discern by looking at the waveform on a scope.
 
 The Bogaudio Analyzer XL is a very nice implementation, so we will use that here.
 
-An analyzer will draw you a real time graph, where the x axis is frequency, and the y axis is amount, or volume.
+An analyzer will draw a real time graph, where the x axis is frequency, and the y axis is amount, or volume, in decibels
 
 Here is what white noise looks like:
 

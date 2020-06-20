@@ -38,4 +38,6 @@ Looking in detail at VCO1's CPU usage: [link here](./docs/vco1-cpu.md)
 
 How to use a spectrum analyzer: [link here](./docs/analyzer.md)
 
-How does VCO1 look on the analyzer? [link here](./docs/aliasing.md)
+How does Demo VCO1 look on the analyzer? (and introduction to aliasing) [link here](./docs/aliasing.md)
+
+More on measuring aliasing. [link here](./docs/aliasing2.md)

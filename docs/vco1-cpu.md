@@ -8,9 +8,11 @@ As to what is an appropriate amount of CPU to use, one easy thing to do is pick 
 
 As far as measuring an easy and obvious way is to use VCV's CPU meters. These aren't really accurate enough to see a small difference like 5%, but they are quite good for a quick comparison of different modules.
 
-So, here is a monophonic patch with several different VCO's: The VCV Fundamental VCO-1, Bogaudio VCO, Bogaudio FM-OP, DEMO VCO1 sin, DEMO VCO1 saw.
+So, let's compare a monophonic patch with several different VCO's: The VCV Fundamental VCO-1, Bogaudio VCO, Bogaudio FM-OP, DEMO VCO1 sin, DEMO VCO1 saw.
 
 First a note about these VCOs. They were chosen because they are very high quality, they don't use a lot of CPU, and they are widely used. Of course they all have many, man more features than the DEMO VCO1. These features can and often do require more CPU to implement. Different plugins take very different approaches to conserving CPU usage, so same may no use CPU for features that aren't in use, others don't use that trick, they just do everything very efficiently. These VCOs are also all open source, do you are free to look inside and see how they work. Also, please read the license first, but these plugins all appear to grant you the right to re-use code from them. This can be very useful!
+
+One other thing. You may notice the CPU usage number are in general pretty small. Here at Squinky Labs we don't buy new computers very often. Recently Microsoft's dicontinuation of support for Windows 7 force us to buy a new computer for the first time in perhaps a decade. So we now have a current CPU. Not the fastest in the world or anything, but probably faster than what most VCV users have.
 
 As you can see, the patch is using the VCV Merge module to generate a known CV input with one channel. This CV goes to all the VCOs. An output from each VCO goes to mixer, and then to the audio card. So it's a realistic patch where everything is doing some work. And, of course, the CPU meters are on.
 

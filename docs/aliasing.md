@@ -1,14 +1,16 @@
-# How does Demo VCO1 look on the anlayzer
+# How does Demo VCO1 look on the analyzer
 
-Here is our demo putting out a sawtooth wave near 1kHz"
+First, a little DSP. A digital signal at a sample rate of Fs can not represent/contain any frequencies/harmonics above Fs/2. This frequency, half the sample rate, is called the "Nyquist" frequency. If you are interestd in this stuff there are many sources, starting with Wikipedia.
+
+Now,here is our demo putting out a sawtooth wave near 1kHz.
 
 ![Demo Saw FFT](./vco-alias.png)
 
-OK, now that looks a lot different than what we save from Fundamental VCO-1. If you remember from the last page, a nice clean digital sawtooth (like the one from Fundamental VCO-1) has all the normal sawtooth harmonics, going all the way to half the sample rate (22050 in out examples). The the higher harmonics just disappear.
+OK, that looks a lot different than what we saw from Fundamental VCO-1. If you remember from the last page, a nice clean digital sawtooth (like the one from Fundamental VCO-1) has all the normal sawtooth harmonics, going all the way to half the sample rate (22050 in our examples). The the higher harmonics just disappear.
 
 What we see here with Demo VCO1 is that the harmonics to up to Fs/2 (22050), but instead of going away, the higher harmonics reflect back down into the audible frequency range. You can clearly see that between every "good" harmonic there is some "bad" aliasing too.
 
-You can clearly see that at very high frequencies there is as much alias is there is harmonic.
+Observe that at very high frequencies there is as much alias is there is harmonic.
 
 Now, there are cases where some people might like the sound of aliasing. But in general it's considered to be awful sounding, and most digital audio products go to great lengths to avoid it. Even if you want a "lo fi" sound, you probably don't want this sound.
 
@@ -20,6 +22,8 @@ That is actually phase jitter. The causes and cures of this kind phase jitter ar
 
 Always keep in mind - in the analog world we are used to some amount of noise, but unless very extreme it's not very objectionable. Analog noise is usually "uncorrelated" with the desired signal, which makes it much easier to ignore, and much easier for your brain to filter out.
 
-Aliasing and phase quantization jitter, however, are correlated with the sign, and sound very, very different from analog noise. One extreme example - if you apply pitch bend to an aliasing VCO to raise the pitch, you can easily hear the undesirable alias tones bending in the other direction!
+Aliasing and phase quantization jitter, however, are correlated with the signal, and sound very, very different from analog noise. One extreme example - if you apply pitch bend to an aliasing VCO to raise the pitch, you can easily hear the undesirable alias tones bending down in the other direction!
 
-With analog noise we are use to seeing it on an analyzer and saying "oh, it's 24 DB down, probably doesn't matter. But digital noise and distortion is a totally different matter. 24 DB down may be quite audible.
+With analog noise we are used to seeing it on an analyzer and saying "oh, it's 24 DB down, probably doesn't matter". But digital noise and distortion is a totally different matter. 24 DB down may be quite audible.
+
+The next section has [more on VCO1 aliasing](./aliasing2.md)
