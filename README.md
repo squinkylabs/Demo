@@ -29,3 +29,6 @@ This Module has several reasons to exist:
 VCO1 produces three different waveforms: sine, saw, and a mutant parabolic saw. Each waveforms comes out on a different jack.
 
 Initial testing results for VCO1: [link here](./docs/vco1-first.md)
+Looking in detail at VCO1's CPU usage: [link here](./docs/vco1-cpu.md)
+How to use a spectrum analyzer: [link here](./docs/analyzer.md)
+How does VCO1 look on the analyzer? [link here](./aliasing.md)
