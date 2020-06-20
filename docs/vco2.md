@@ -42,7 +42,7 @@ This time we increased the patch polyphony to 16, to make the number large enoug
 
 The first surprising thing - almost shocking - it that VCO2's sine is almost 15 X more efficient now!
 
-Another surprise is that VCO2 sin is at least three times more efficient that the other VCOs.
+Another surprise is that VCO2 sin is at least three times more efficient that the other VCOs. Those other VCOs do a lot of things, but at least it shows that if you want to write a dedicated VCO that just does one thing really well, it's usually possible, and not even particularly difficult.
 
 Now let's look address the aliasing. There are, broadly speaking, four well know way to deal with aliasing, all of them used in some VCV modules:
 
@@ -72,14 +72,14 @@ Luckily for plugin developers, the VCV SDK ships with a very good implementation
 So, here is what the aliasing looks like now on VCO2
 ![VCO2 ALIAS](./vco-2-alias.png)
 
-Not surprisingly, it looks exactly like VCV's VCO. Which is should, since it's the same code.
+Not surprisingly, it looks exactly like VCV's VCO. Which is should, since it's the same code. You will also notice that the small DC offset that we previously saw in VCO-1 has now crept into our VCO. Is must be a small flaw in the minBlep library.
 
-The analyzer also shows that we succeeded in getting rid of the aliasing from our parabolic VCO with the same minBlep. Disapointingly, the analyzer also suggests that it won't sound much different that a straight saw. We included it because:
+The analyzer also shows that we succeeded in getting rid of the aliasing from our parabolic VCO with the same minBlep. Disappointingly, the analyzer also suggests that it won't sound much different that a straight saw. We included it because:
 
 * You can see that minBlep can be used with almost any waveform that consists of mostly smooth curves and abrupt steps.
 * It allowed us to do a "clever" trick to reduce CPU usage. Both the sawtooth and the parabola use the same minBlep, rather than using two, one for each.
 
-minBlep is a large topic. Of course we can't cover all of it here. Here are some links to some of the more commonly sited papers. Of course being university resereach they are very heavy on the math and DSP.
+minBlep is a large topic. Of course we can't cover all of it here. Here are some links to some of the more commonly sited papers. Of course being university research they are very heavy on the math and DSP.
 
 This one covers a [bunch of different techniques](https://ccrma.stanford.edu/~stilti/papers/blit.pdf)
 

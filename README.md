@@ -22,7 +22,7 @@ You must have some sort of text editor, preferably one designed for writing comp
 
 ## Don't forget the VCV manual
 
-Although unfinished, the VCV manual has an excellent chapter on DSP. It talks about band-limited waveforms, mentions minBlep, and has an excellent section on optimized code for minimum CPU usage. You don't need to read that as a prerequisite to our documents, but if you are going to build your own VCV module you really should read it. [link here](https://vcvrack.com/manual/DSP)
+Although unfinished, the VCV manual has an excellent chapter on DSP. It talks about band-limited waveforms, mentions minBlep, and has an excellent section on optimizing code for minimum CPU usage. You don't need to read that as a prerequisite to our documents, but if you are going to build your own VCV module you really should read it. [link here](https://vcvrack.com/manual/DSP)
 
 ## Demo VCO1
 
@@ -54,3 +54,17 @@ How does Demo VCO1 look on the analyzer? (and introduction to aliasing) [link he
 More on measuring aliasing. [link here](./docs/aliasing2.md)
 
 Introducing Demo VCO2: [link here](./docs/vco2.md)
+
+## Summary
+
+Hopefully you read all this pages listed above, and didn't skip here immediately! In any case here are some of the points we hope we demonstrated here:
+
+We learned how to easily measure the CPU usage and Distortion from VCV modules.
+
+We learned that it is really easy to make a VCV module is terribly wasteful of CPU. But it is easy to measure crudely, and usually very easy to fix. Another plug for the VCV manual - it has an excellent section on this topic.
+
+We also saw it is very easy to make a VCO that generates a huge amount of aliasing distortion, even without trying. The good news is that the VCV plugin SDK provides a very easy to use implementation on minBlep that can fix this, at least for VCOs like Demo.
+
+Lastly, we provided source code that can easily be re-used for someone who wants to start a pluigin "from code". The code has lots of comments in it that will hopefully make it easier for others to start writing VCV modules.
+
+For more on writing efficient plugins aside from the excellent info in the VCV manual, there is this paper we wrote over a year ago. It's badly in need of update to VCV 1.0, but it has been a popular source of info [writing efficient plugins](https://github.com/squinkylabs/SquinkyVCV/blob/master/docs/efficient-plugins.md)
