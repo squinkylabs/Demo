@@ -10,7 +10,13 @@
 			"slug": "demo-vco1",
 			"name": "VCO1",
 			"description": "Naive VCO",
-			"tags": ["VCO"]
+			"tags": ["VCO", "Polyphonic"]
+		},
+		{
+			"slug": "demo-vco2",
+			"name": "VCO2",
+			"description": "Improved VCO",
+			"tags": ["VCO", "Polyphonic"]
         }
     ]
 }
