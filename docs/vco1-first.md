@@ -21,4 +21,4 @@ So we see that the pitch changes by an octave when the CV changes by a volt.
 
 So far, it looks like VCO1 is working perfectly. In our next session we will dig a little deeper and find some pretty bad flaws in VCO1.
 
-To go directly to the next page on CPU consumption, click [here](./vco1-cpu.md)
+To go directly to the next page on CPU consumption, click [here](./vco1-cpu.md).
