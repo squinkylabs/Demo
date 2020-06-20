@@ -1,13 +1,20 @@
 /**
- * This file contains the entire implementation of the VCO1 demo module.
- * Although it is possible to implement more than one module in a single file,
- * it is rarely done.
+ * This file contains the entire implementation of the VCO2 demo module.
+ *
+ * The code for VCO2 is very, very close to the code for VCO1.
+ * We have marked the few changes with:
+ * NEW 4 VCO2
+ * 
  */
 
 #include "demo-plugin.hpp"
 
 
-// This is a fast sine approximation function from Fundamental VCO-1
+/**
+ * This is a fast sine approximation function from VCV Fundamental VCO-1.
+ * We have literally copied and pasted it unchanged.
+ * NEW 4 VCO2
+ */
 template <typename T>
 T sin2pi_pade_05_5_4(T x) {
 	x -= 0.5f;
@@ -45,8 +52,16 @@ struct VCO2Module : Module
     float phaseAccumulators[maxPolyphony] = {0};
     float phaseAdvance[maxPolyphony] = {0};
 
-    // Because our para waveform jumps just like the saw,
-    // they can share the same minBlep generator.
+    
+    /**
+     * Reduce the aliasing by using the minBlep technique.
+     * Luckily VCV SDK contains a good implementation of this.
+     * Otherwise it would be a lot of work to do it oursves.
+     * 
+     * Because our para waveform jumps just like the saw,
+     * at the same time, they can share the same minBlep generator.
+     * NEW 4 VCO2
+     */
     dsp::MinBlepGenerator<16, 16, float> sawMinBlep[maxPolyphony];
     int currentPolyphony = 1;
     int loopCounter = 0;
@@ -101,9 +116,10 @@ struct VCO2Module : Module
             const float q = float(log2(261.626));       // move up to C
             combinedPitch += q;
 
-            // combined pitch is in volts. Now use the pow function
+            // Combined pitch is in volts. Now use an exponential function
             // to convert that to a pitch.
-            // this time we use the fast exp approximation from the VCV SDK.
+            // This time we use the fast exp approximation from the VCV SDK.
+            // NEW 4 VCO2
             const float freq = rack::dsp::approxExp2_taylor5(combinedPitch);
 
             // figure out how much to add to our ramp every cycle 
@@ -123,11 +139,11 @@ struct VCO2Module : Module
                 phaseAccumulators[i] -= 1.f;
             }
 
+            // NEW 4 VCO2
             // Let's change our saw so that it has it's step when phase = .5.
             // our VCO1 used the phase as the saw, so wrapped at 0/1.
             // By changing our output phase we can re-use the VCV VCO1 minBLEP code 
-            // without having to think about it too much
-
+            // without having to think about it much at all
             // Do the minBlep processing, but only if we are using saw or para.
             float minBlep;
             if (outputSaw || outputPara) {
@@ -150,9 +166,16 @@ struct VCO2Module : Module
             }
 
             if (outputSaw) {
+                // NEW 4 VCO2
+                // Because of the decision mentioned above to have out
+                //output waveform have a different phase, we need to do
+                // the same arithmetic that VCV VCO-1 uses to calculate the
+                // output waveform.
                 float rawSaw =  (phaseAccumulators[i] + .5f);
                 rawSaw -= std::trunc(rawSaw);
                 rawSaw = 2 * rawSaw - 1;
+
+                //  NEW 4 VCO2: add in the minBlep correction that we calculated above.
                 rawSaw += minBlep;
                 float sawWave = 5 * rawSaw;
                 outputs[SAW_OUTPUT].setVoltage(sawWave, i);
@@ -161,13 +184,15 @@ struct VCO2Module : Module
             if (outputPara) {
                 // This simple "parabolic ramp" is an example of a way one could try to 
                 // make the sawtooth sound a little different.
-
+                // NEW 4 VCO2: do math like we did with the saw to shift
+                // the phase so it matches the phase of the minBlep.
                 float paraWave = (phaseAccumulators[i] + .5f);
                 paraWave -= std::trunc(paraWave);       // now 0 ... 1
-                paraWave *= paraWave;                  // squared, but still 0..1
-                paraWave = 2 * paraWave; // now 0..2
+                paraWave *= paraWave;                   // squared, but still 0..1
+                paraWave = 2 * paraWave;                // now 0..2
                 paraWave += minBlep;
-                paraWave -= .33f * 2;       // subtract out the DC component (use your calculus or trial and error).
+                paraWave -= .33f * 2;                   // subtract out the DC component
+                                                        // (use your calculus or trial and error).
                 paraWave *= 5;
                 outputs[PARA_OUTPUT].setVoltage(paraWave, i);
             }
@@ -176,6 +201,7 @@ struct VCO2Module : Module
                 // If the sin output it patched, turn our 0..1 ramp
                 // into a -5..+5 sine.
                 // Use fast sin approximation from VCV VCO-1
+                // NEW 4 VCO2
                 float sinWave = 5.f * sin2pi_pade_05_5_4( phaseAccumulators[i]);
                 outputs[SIN_OUTPUT].setVoltage(sinWave, i);
             }
