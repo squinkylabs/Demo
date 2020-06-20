@@ -20,6 +20,10 @@ You must have an appropriate set of build tools installed. On Windows that means
 
 You must have some sort of text editor, preferably one designed for writing computer code. There are many good, free ones available. We like Visual Studio Code.
 
+## Don't forget the VCV manual
+
+Although unfinished, the VCV manual has an excellent chapter on DSP. It talks about band-limited waveforms, mentions minBlep, and has an excellent section on optimized code for minimum CPU usage. You don't need to read that as a prerequisite to our documents, but if you are going to build your own VCV module you really should read it. [link here](https://vcvrack.com/manual/DSP)
+
 ## Demo VCO1
 
 Demo VCO1 is a very simple polyphonic VCO. It is not a particularly good one, but the code is very small, and hopefully reasonably readable.

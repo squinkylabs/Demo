@@ -44,6 +44,43 @@ The first surprising thing - almost shocking - it that VCO2's sine is almost 15 
 
 Another surprise is that VCO2 sin is at least three times more efficient that the other VCOs.
 
-Now let's look at the aliasing.
+Now let's look address the aliasing. There are, broadly speaking, four well know way to deal with aliasing, all of them used in some VCV modules:
 
+* Oversampling
+* minBlep
+* Something else
+* Do nothing
+
+The first two techniques, oversampling and minBlep, are often used by VCV modules. "Something else" is usually something the will be very specific to the individual module, and probably required a lot of skill and effort. We believe the Vult modules use "something else".
+
+Oversampling can work with any module, but can be CPU intensive and/or less effective than minBlep. Several Squinky Labs modules use it: Shapes (waveshaper), Stairway (filter), and Functional VCO-1.
+
+MinBlep is perfect for our sawtooth. Minblep is commonly used for digital emulation of "classic analog" wave-forms like Saw, Square, Triangle, Hard-synced sine, etc...
+
+MinBlep stands for "minimum phase band limited step". It makes use of the handy fact that waveforms like sawtooth really only have bad problems when they jump suddenly. MinBlep involves calculating what the analog signal "would have been" in only those regions where there is a step. Or something that can be mathematically transformed into a step, like a triangle.
+
+minBlep:
+
+* Is very effective at reducing aliasing and phase jitter.
+* Is quite math intensive.
+* Requires at least a mid-level of DSP learning to understand.
+* Cannot be used to reduce aliasing for thru-zero-FM, or other waveforms that don't fit its model.
+* almost no CPU at low frequencies, but the CPU load goes up linearly with frequency.
+
+Luckily for plugin developers, the VCV SDK ships with a very good implementation of minBlep, eliminating the need for a masters degree in DSP. It can still be tricky to apply it correctly, but copying VCV's VCO-1 and a bit of trial and error can make it work. For Demo VCO2 we took the minBlep code from VCV's Fundamental VCO-1 and modified it very little. In fact we modified Demo VCO2 to be more like Fundamental just to make it easier to steal the minBlep code. (and, remember, it isn't stealing, it's legal and encouraged by the open source license. Just make sure you actually read the license and abide by the terms).
+
+So, here is what the aliasing looks like now on VCO2
 ![VCO2 ALIAS](./vco-2-alias.png)
+
+Not surprisingly, it looks exactly like VCV's VCO. Which is should, since it's the same code.
+
+The analyzer also shows that we succeeded in getting rid of the aliasing from our parabolic VCO with the same minBlep. Disapointingly, the analyzer also suggests that it won't sound much different that a straight saw. We included it because:
+
+* You can see that minBlep can be used with almost any waveform that consists of mostly smooth curves and abrupt steps.
+* It allowed us to do a "clever" trick to reduce CPU usage. Both the sawtooth and the parabola use the same minBlep, rather than using two, one for each.
+
+minBlep is a large topic. Of course we can't cover all of it here. Here are some links to some of the more commonly sited papers. Of course being university resereach they are very heavy on the math and DSP.
+
+This one covers a [bunch of different techniques](https://ccrma.stanford.edu/~stilti/papers/blit.pdf)
+
+This one [focuses on minBlep](http://www.cs.cmu.edu/~eli/papers/icmc01-hardsync.pdf)
