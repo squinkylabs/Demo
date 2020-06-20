@@ -44,8 +44,10 @@ struct VCO2Module : Module
 
     float phaseAccumulators[maxPolyphony] = {0};
     float phaseAdvance[maxPolyphony] = {0};
+
+    // Because our para waveform jumps just like the saw,
+    // they can share the same minBlep generator.
     dsp::MinBlepGenerator<16, 16, float> sawMinBlep[maxPolyphony];
-    dsp::MinBlepGenerator<16, 16, float> paraMinBlep[maxPolyphony];
     int currentPolyphony = 1;
     int loopCounter = 0;
     bool outputSaw = false;
@@ -100,9 +102,8 @@ struct VCO2Module : Module
             combinedPitch += q;
 
             // combined pitch is in volts. Now use the pow function
-            // to convert that to a pitch. Not: there are more efficient ways
-            // to do this than use std::pow.
-           // const float freq = std::pow(2.f, combinedPitch);
+            // to convert that to a pitch.
+            // this time we use the fast exp approximation from the VCV SDK.
             const float freq = rack::dsp::approxExp2_taylor5(combinedPitch);
 
             // figure out how much to add to our ramp every cycle 
@@ -123,18 +124,28 @@ struct VCO2Module : Module
             }
 
             // Let's change our saw so that it has it's step when phase = .5.
-            // VCO used the phase as the saw, so wrapped at 0/1
-            float halfCrossing = (0.5f - (phaseAccumulators[i] -  phaseAdvance[i])) /  phaseAdvance[i];
-            bool jump = ((0 < halfCrossing) & (halfCrossing <= 1.f));
-            if (jump) {
-                float jumpPhase = halfCrossing - 1.f;
-                float jumpAmount = -2;
-                sawMinBlep[i].insertDiscontinuity(jumpPhase, jumpAmount);
-            }
+            // our VCO1 used the phase as the saw, so wrapped at 0/1.
+            // By changing our output phase we can re-use the VCV VCO1 minBLEP code 
+            // without having to think about it too much
 
-            // rawSaw will go -1..1 and have the minBlep in it
+            // Do the minBlep processing, but only if we are using saw or para.
             float minBlep;
             if (outputSaw || outputPara) {
+
+                // Evaluate the phase, and determine if we are at a discontinuity.
+                // Determine if the saw "should have" already crossed .5V in the last sample period
+                // halfCrossing will be < 0 if cross over happened before the previous sample.
+                // it will be >= 1 if it will happen after the current sample.
+                // if it's in between, it represents where in the previous sample the discontinuity
+                // "should have" happened.
+                float halfCrossing = (0.5f - (phaseAccumulators[i] -  phaseAdvance[i])) /  phaseAdvance[i];
+                bool jump = ((0 < halfCrossing) & (halfCrossing <= 1.f));
+                if (jump) {
+                    float jumpPhase = halfCrossing - 1.f;
+                    float jumpAmount = -2;
+                    sawMinBlep[i].insertDiscontinuity(jumpPhase, jumpAmount);
+                }
+
                 minBlep = sawMinBlep[i].process();
             }
 
@@ -164,6 +175,7 @@ struct VCO2Module : Module
             if (outputSin) {
                 // If the sin output it patched, turn our 0..1 ramp
                 // into a -5..+5 sine.
+                // Use fast sin approximation from VCV VCO-1
                 float sinWave = 5.f * sin2pi_pade_05_5_4( phaseAccumulators[i]);
                 outputs[SIN_OUTPUT].setVoltage(sinWave, i);
             }
