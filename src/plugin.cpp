@@ -10,4 +10,5 @@ void init(rack::Plugin* p) {
 	// There must be at least one. Often there are many more.
 	p->addModel(modelVCO1);
 	p->addModel(modelVCO2);
+	p->addModel(modelVCO3);
 }

@@ -17,6 +17,12 @@
 			"name": "VCO2",
 			"description": "Improved VCO",
 			"tags": ["VCO", "Polyphonic"]
+		},
+		{
+			"slug": "demo-vco3",
+			"name": "VCO3",
+			"description": "SIMD VCO",
+			"tags": ["VCO", "Polyphonic"]
         }
     ]
 }

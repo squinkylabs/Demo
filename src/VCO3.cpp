@@ -8,6 +8,9 @@
  */
 
 #include "demo-plugin.hpp"
+#include <simd/vector.hpp>
+
+using float_4 = simd::float_4;
 
 
 /**
@@ -25,11 +28,15 @@ T sin2pi_pade_05_5_4(T x) {
 // VCV has a limit of 16 channels in a polyphonic cable.
 static const int maxPolyphony = 16;
 
+// Since simd processes 4 floats at once,
+// we will need four banks of four to make 16 voices.
+static const int maxBanks = maxPolyphony / 4;
+
 /**
  *  Every synth module must have a Module structure.
  *  This is where all the real-time processing code goes.
  */
-struct VCO2Module : Module
+struct VCO3Module : Module
 {
     enum ParamIds {
         PITCH_PARAM,
@@ -49,8 +56,8 @@ struct VCO2Module : Module
         NUM_LIGHTS
     };
 
-    float phaseAccumulators[maxPolyphony] = {0};
-    float phaseAdvance[maxPolyphony] = {0};
+    float_4 phaseAccumulators[maxBanks] = {0};
+    float_4 phaseAdvance[maxBanks] = {0};
 
     
     /**
@@ -69,7 +76,7 @@ struct VCO2Module : Module
     bool outputSin = false;
     bool outputPara = false;
 
-    VCO2Module() {
+    VCO3Module() {
         // Your module must call config from its constructor, passing in
         // how many ins, outs, etc... it has.
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -129,6 +136,8 @@ struct VCO2Module : Module
         }
     }
 
+    void generateOutput() {}
+#if 0 // let's to this difficult porting later
     void generateOutput() {
         for (int i = 0; i < currentPolyphony; ++i) {
             // Every sample, we advance the phase of our ramp by the amount
@@ -207,6 +216,8 @@ struct VCO2Module : Module
             }
         }
     }
+
+#endif
 };
 
 /**
@@ -215,8 +226,8 @@ struct VCO2Module : Module
  * Widgets may draw to the screen, get mouse and keyboard input, etc...
  * Widgets cannot actually process or generate audio.
  */
-struct VCO2Widget : ModuleWidget {
-    VCO2Widget(VCO2Module* module) {
+struct VCO3Widget : ModuleWidget {
+    VCO3Widget(VCO3Module* module) {
         // The widget always retains a reference to the module.
         // you must call this function first in your widget constructor.
         setModule(module);
@@ -250,11 +261,11 @@ struct VCO2Widget : ModuleWidget {
         // and lights for the module. VCO2 does not have any lights, but does have
         // the other widgets.
 
-        addInput(createInput<PJ301MPort>(Vec(x, inputY), module, VCO2Module::CV_INPUT));
-        addParam(createParam<RoundBlackKnob>(Vec(x-4, knobY), module, VCO2Module::PITCH_PARAM));
-        addOutput(createOutput<PJ301MPort>(Vec(x, sawY), module, VCO2Module::SAW_OUTPUT));
-        addOutput(createOutput<PJ301MPort>(Vec(x, sinY), module, VCO2Module::SIN_OUTPUT));
-        addOutput(createOutput<PJ301MPort>(Vec(x, paraY), module, VCO2Module::PARA_OUTPUT));
+        addInput(createInput<PJ301MPort>(Vec(x, inputY), module, VCO3Module::CV_INPUT));
+        addParam(createParam<RoundBlackKnob>(Vec(x-4, knobY), module, VCO3Module::PITCH_PARAM));
+        addOutput(createOutput<PJ301MPort>(Vec(x, sawY), module, VCO3Module::SAW_OUTPUT));
+        addOutput(createOutput<PJ301MPort>(Vec(x, sinY), module, VCO3Module::SIN_OUTPUT));
+        addOutput(createOutput<PJ301MPort>(Vec(x, paraY), module, VCO3Module::PARA_OUTPUT));
     
         // Add some quick hack labels to the panel.
         addLabel(Vec(20, headingY), "Demo VCO2");
@@ -282,11 +293,4 @@ struct VCO2Widget : ModuleWidget {
     }
 };
 
-// This mysterious line must appear for each module. The
-// name in quotes at then end is the same string that will be in 
-// plugin.json in the entry for corresponding plugin.
-
-// This line basically tells VCV Rack:
-// I'm called "demo-vco2", my module is VCO2Module, and my Widget is VCO2Widget.
-// In effect, it implements a module factory.
-Model* modelVCO2 = createModel<VCO2Module, VCO2Widget>("demo-vco2");
+Model* modelVCO3 = createModel<VCO3Module, VCO3Widget>("demo-vco3");
