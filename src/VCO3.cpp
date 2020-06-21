@@ -71,6 +71,7 @@ struct VCO3Module : Module
      */
     dsp::MinBlepGenerator<16, 16, float> sawMinBlep[maxPolyphony];
     int currentPolyphony = 1;
+    int currentBanks = 1;
     int loopCounter = 0;
     bool outputSaw = false;
     bool outputSin = false;
@@ -106,6 +107,10 @@ struct VCO3Module : Module
         // It is also very common to always run one channel, even if there is
         // no input. This lets the VCO generate output with no input.
         currentPolyphony = std::max(1, inputs[CV_INPUT].getChannels());
+        currentBanks = currentPolyphony / 4;
+        if (currentPolyphony % 4) {
+            ++currentBanks;
+        }
         outputs[SIN_OUTPUT].setChannels(currentPolyphony);
         outputs[SAW_OUTPUT].setChannels(currentPolyphony);
         outputs[PARA_OUTPUT].setChannels(currentPolyphony);
@@ -115,24 +120,34 @@ struct VCO3Module : Module
         outputSaw = outputs[SAW_OUTPUT].isConnected();
         outputSin = outputs[SIN_OUTPUT].isConnected();
         outputPara = outputs[PARA_OUTPUT].isConnected();
-        float pitchParam = params[PITCH_PARAM].value;
-        for (int i = 0; i < currentPolyphony; ++i) {
-            float pitchCV = inputs[CV_INPUT].getVoltage(i);
-            float combinedPitch = pitchParam + pitchCV - 4.f;
 
-            const float q = float(log2(261.626));       // move up to C
+        // Note that assigning a float to a float_4 silently copies the float into all
+        // four floats in the float_4.
+        float_4 pitchParam = params[PITCH_PARAM].value;
+        for (int bank = 0; bank < currentBanks; ++bank) {
+            const int currentChannel = bank * 4;
+
+            // This API lets us fetch the CV for four channels at once.
+            float_4 pitchCV = inputs[CV_INPUT].getPolyVoltageSimd<float_4>(currentChannel);
+        
+            // Normal arithmetic operators work transparently with float_4.
+            // Sometimes when expressions mix float_4 and float you need
+            // to explicitly convert, like we do here with the number f.
+            float_4 combinedPitch = pitchParam + pitchCV - float_4(4.f);
+
+            const float_4 q = float(log2(261.626));       // move up to C
             combinedPitch += q;
 
             // Combined pitch is in volts. Now use an exponential function
             // to convert that to a pitch.
             // This time we use the fast exp approximation from the VCV SDK.
             // NEW 4 VCO2
-            const float freq = rack::dsp::approxExp2_taylor5(combinedPitch);
+            const float_4 freq = rack::dsp::approxExp2_taylor5<float_4>(combinedPitch);
 
             // figure out how much to add to our ramp every cycle 
             // to make a saw at the desired frequency.
-            const float normalizedFreq = args.sampleTime * freq;
-            phaseAdvance[i] = normalizedFreq;
+            const float_4 normalizedFreq = float_4(args.sampleTime) * freq;
+            phaseAdvance[bank] = normalizedFreq;
         }
     }
 
