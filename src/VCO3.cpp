@@ -69,7 +69,7 @@ struct VCO3Module : Module
      * at the same time, they can share the same minBlep generator.
      * NEW 4 VCO2
      */
-    dsp::MinBlepGenerator<16, 16, float> sawMinBlep[maxPolyphony];
+    dsp::MinBlepGenerator<16, 16, float_4> sawMinBlep[maxBanks];
     int currentPolyphony = 1;
     int currentBanks = 1;
     int loopCounter = 0;
@@ -151,42 +151,39 @@ struct VCO3Module : Module
         }
     }
 
-    void generateOutput() {}
-#if 0 // let's to this difficult porting later
     void generateOutput() {
-        for (int i = 0; i < currentPolyphony; ++i) {
-            // Every sample, we advance the phase of our ramp by the amount
-            // we derived from the CV and knob inputs.
-            phaseAccumulators[i] += phaseAdvance[i];
-            if (phaseAccumulators[i] > 1.f) {
-                // We limit our phase to the range 0..1
-                phaseAccumulators[i] -= 1.f;
-            }
+        for (int bank = 0; bank < currentBanks; ++bank) {
+            const int baseChannel = bank * 4;
+            const int relativeChannel = currentPolyphony - baseChannel;
 
-            // NEW 4 VCO2
-            // Let's change our saw so that it has it's step when phase = .5.
-            // our VCO1 used the phase as the saw, so wrapped at 0/1.
-            // By changing our output phase we can re-use the VCV VCO1 minBLEP code 
-            // without having to think about it much at all
-            // Do the minBlep processing, but only if we are using saw or para.
-            float minBlep;
+            // Just as before, be advance the phase and wrap around 0.
+            // This time we do four oscillators at once.
+            phaseAccumulators[bank] += phaseAdvance[bank];
+            phaseAccumulators[bank] -= simd::floor(phaseAccumulators[bank]);
+           
+
+            float_4 minBlepValue;
             if (outputSaw || outputPara) {
 
                 // Evaluate the phase, and determine if we are at a discontinuity.
                 // Determine if the saw "should have" already crossed .5V in the last sample period
-                // halfCrossing will be < 0 if cross over happened before the previous sample.
-                // it will be >= 1 if it will happen after the current sample.
-                // if it's in between, it represents where in the previous sample the discontinuity
-                // "should have" happened.
-                float halfCrossing = (0.5f - (phaseAccumulators[i] -  phaseAdvance[i])) /  phaseAdvance[i];
-                bool jump = ((0 < halfCrossing) & (halfCrossing <= 1.f));
-                if (jump) {
-                    float jumpPhase = halfCrossing - 1.f;
-                    float jumpAmount = -2;
-                    sawMinBlep[i].insertDiscontinuity(jumpPhase, jumpAmount);
+                // This is the SIMD version of the minBlep code from VCO2. Well, more properly it's the
+                // code from VCV Fundamental VCO-1. I find this algorithm pretty difficult to figure out
+                // in SIMD. Thank goodness the Fundamental code is such a rich well.
+                float_4 halfCrossing = (0.5f - (phaseAccumulators[bank] -  phaseAdvance[bank])) /  phaseAdvance[bank];
+                int halfMask = simd::movemask((0 < halfCrossing) & (halfCrossing <= 1.f));
+                if (halfMask) {
+                    for (int subChannel=0; subChannel < relativeChannel; ++subChannel) {
+                        if (halfMask & (1 << subChannel)) {
+                            float_4 mask = simd::movemaskInverse<float_4>(1 << subChannel);
+                            float jumpPhase = halfCrossing[subChannel] - 1.f;
+                            float_4 jumpAmount = mask & -2.f;
+                            sawMinBlep[bank].insertDiscontinuity(jumpPhase, jumpAmount);
+                        }
+                    }
                 }
 
-                minBlep = sawMinBlep[i].process();
+                minBlepValue = sawMinBlep[bank].process();
             }
 
             if (outputSaw) {
@@ -195,14 +192,14 @@ struct VCO3Module : Module
                 //output waveform have a different phase, we need to do
                 // the same arithmetic that VCV VCO-1 uses to calculate the
                 // output waveform.
-                float rawSaw =  (phaseAccumulators[i] + .5f);
-                rawSaw -= std::trunc(rawSaw);
+                float_4 rawSaw = phaseAccumulators[bank] + float_4(.5f);
+                rawSaw -= simd::trunc(rawSaw);
                 rawSaw = 2 * rawSaw - 1;
 
                 //  NEW 4 VCO2: add in the minBlep correction that we calculated above.
-                rawSaw += minBlep;
-                float sawWave = 5 * rawSaw;
-                outputs[SAW_OUTPUT].setVoltage(sawWave, i);
+                rawSaw += minBlepValue;
+                float_4 sawWave = float_4(5) * rawSaw;
+                outputs[SAW_OUTPUT].setVoltageSimd(sawWave, baseChannel);
             }
 
             if (outputPara) {
@@ -210,15 +207,15 @@ struct VCO3Module : Module
                 // make the sawtooth sound a little different.
                 // NEW 4 VCO2: do math like we did with the saw to shift
                 // the phase so it matches the phase of the minBlep.
-                float paraWave = (phaseAccumulators[i] + .5f);
-                paraWave -= std::trunc(paraWave);       // now 0 ... 1
+                float_4 paraWave = phaseAccumulators[bank] + float_4(.5f);
+                paraWave -= simd::trunc(paraWave);       // now 0 ... 1
                 paraWave *= paraWave;                   // squared, but still 0..1
                 paraWave = 2 * paraWave;                // now 0..2
-                paraWave += minBlep;
+                paraWave += minBlepValue;
                 paraWave -= .33f * 2;                   // subtract out the DC component
                                                         // (use your calculus or trial and error).
                 paraWave *= 5;
-                outputs[PARA_OUTPUT].setVoltage(paraWave, i);
+                outputs[PARA_OUTPUT].setVoltageSimd(paraWave, baseChannel);
             }
 
             if (outputSin) {
@@ -226,13 +223,11 @@ struct VCO3Module : Module
                 // into a -5..+5 sine.
                 // Use fast sin approximation from VCV VCO-1
                 // NEW 4 VCO2
-                float sinWave = 5.f * sin2pi_pade_05_5_4( phaseAccumulators[i]);
-                outputs[SIN_OUTPUT].setVoltage(sinWave, i);
+                float_4 sinWave = float_4(5.f) * sin2pi_pade_05_5_4( phaseAccumulators[bank]);
+                outputs[SIN_OUTPUT].setVoltageSimd(sinWave, baseChannel);
             }
         }
     }
-
-#endif
 };
 
 /**
