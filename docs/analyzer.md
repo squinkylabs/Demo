@@ -15,6 +15,13 @@ The Bogaudio analyzer has a lot of settings. Many of the default setting are app
 * Amplitude range. The default 60 dB range is good. That's what we used here.
 * Frequency range. We use the default "full".
 
+Analyzer XL has other settings that may be useful, check them all out.
+
+Our choice here to use the 60 dB amplitude range is motivated by a couple of factors:
+
+* It is easier to see the important details in this "zoomed in" view.
+* All of the VCOs here has some amount of "gunk" at extremely low levels. We believe this gunk is completely inaudible, and didn't want to get distracted by it.
+
 Here is what white noise looks like:
 
 ![white noise](./fft-noise.png)

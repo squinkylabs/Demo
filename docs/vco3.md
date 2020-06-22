@@ -57,11 +57,11 @@ btw: here is our inelegant and not very smart sine approximation:
  * one from Fundamental VCO-1. This one is a little crude, not super
  * accurate, and really could be optimized more.
  *
- * This one is done by doing the calculations with two different 
+ * This one is done by doing the calculations with two different
  * equations depending on whether the radian angle is  more or less than pi.
  *
  * The equations themselves are very simple fourth order Taylor series, with
- * an arbitrary fudge factor added into to make it more accurate.
+ * an arbitrary fudge factor added in to make it more accurate.
  *
  * This can undoubtedly be improved.
  *

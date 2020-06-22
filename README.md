@@ -75,6 +75,8 @@ We also saw it is very easy to make a VCO that generates a huge amount of aliasi
 
 We gave a very short introduction to SIMD coding, in particular how much it can reduce the CPU usage of a polyphonic module.
 
+We demonstrated something that is already well known - `std::sin()` and `std::pow()` use a lot of CPU and can be effectively approximated.
+
 Lastly, we provided source code that can easily be re-used for someone who wants to start a plugin "from code". The code has lots of comments in it that will hopefully make it easier for others to start writing VCV modules.
 
-For more on writing efficient plugins aside from the excellent info in the VCV manual, there is this paper we wrote over a year ago. It's badly in need of update to VCV 1.0, but it has been a popular source of info: [writing efficient plugins](https://github.com/squinkylabs/SquinkyVCV/blob/master/docs/efficient-plugins.md)
+For more on writing efficient plugins aside from the excellent info in the VCV manual, here is a paper we wrote over a year ago. It's badly in need of update to VCV 1.0, but it has been a popular source of info: [writing efficient plugins](https://github.com/squinkylabs/SquinkyVCV/blob/master/docs/efficient-plugins.md)
