@@ -41,6 +41,10 @@ VCO1 produces three different waveforms: sine, saw, and a mutant parabolic saw. 
 
 VCO2 functions exactly the same as VCO1, but fixed the problems identified in VCO1.
 
+## VCO3
+
+Again, same as VCO2, but now using the Intel SIMD instruction set to make it faster. 
+
 ## Table of contents
 
 Initial testing results for VCO1: [link here](./docs/vco1-first.md)
@@ -54,6 +58,8 @@ How does Demo VCO1 look on the analyzer? (and introduction to aliasing): [link h
 More on measuring aliasing: [link here](./docs/aliasing2.md)
 
 Introducing Demo VCO2: [link here](./docs/vco2.md)
+
+Introducing Demo VCO3: [link here](./docs/vco3.md)
 
 ## Summary
 

@@ -12,28 +12,25 @@
 
 using float_4 = simd::float_4;
 
-
-/**
- * This is a fast sine approximation function from VCV Fundamental VCO-1.
- * We have literally copied and pasted it unchanged.
- * NEW 4 VCO2
- */
-template <typename T>
-T sin2pi_pade_05_5_4(T x) {
-	x -= 0.5f;
-	return (T(-6.283185307) * x + T(33.19863968) * simd::pow(x, 3) - T(32.44191367) * simd::pow(x, 5))
-	       / (1 + T(1.296008659) * simd::pow(x, 2) + T(0.7028072946) * simd::pow(x, 4));
-}
-
-
 /*
- * only accurate for 0 <= x <= two Pi
+ * This time we are using our own sine approximation, rather than the
+ * one from Fundamental VCO-1. This one is a little crude, not super
+ * accurate, and really could be optimized more.
+ * 
+ * This one is done by doing the calculations with two different 
+ * equations depending on whether the radian angle is  more or less than pi.
+ * 
+ * The equations themselves are very simple fourth order Taylor series, with
+ * an arbitrary fudge factor added into to make it more accurate.
+ * 
+ * This can undoubtedly be improved.
+ * 
+ * input: _x must be >= 0, and <= 2 * pi.
  */
 
 inline float_4 SquinkyLabs_sinTwoPi(float_4 _x) {
     const static float twoPi = 2 * 3.141592653589793238;
     const static float pi =  3.141592653589793238;
- //   _x -= SimdBlocks::ifelse((_x > float_4(pi)), float_4(twoPi), float_4::zero()); 
     _x -= ifelse((_x > float_4(pi)), float_4(twoPi), float_4::zero()); 
 
     float_4 xneg = _x < float_4::zero();
@@ -81,20 +78,14 @@ struct VCO3Module : Module
         NUM_LIGHTS
     };
 
+    // Notice that many of the variables that were "float"
+    // before are now "float_4". float_4 is a vector of four
+    // floats that fits in a single CPU register an can be processed
+    // all at once.
     float_4 phaseAccumulators[maxBanks] = {0};
     float_4 phaseAdvance[maxBanks] = {0};
-
-    
-    /**
-     * Reduce the aliasing by using the minBlep technique.
-     * Luckily VCV SDK contains a good implementation of this.
-     * Otherwise it would be a lot of work to do it ourselves.
-     * 
-     * Because our para waveform jumps just like the saw,
-     * at the same time, they can share the same minBlep generator.
-     * NEW 4 VCO2
-     */
     dsp::MinBlepGenerator<16, 16, float_4> sawMinBlep[maxBanks];
+
     int currentPolyphony = 1;
     int currentBanks = 1;
     int loopCounter = 0;
@@ -109,13 +100,7 @@ struct VCO3Module : Module
         configParam(PITCH_PARAM, 0, 10, 4, "Initial Pitch");
     }
 
-    // Every Module has a process function. This is called once every
-    // sample, and must service all the inputs and outputs of the module.
     void process(const ProcessArgs& args) override {
-
-        // There are usually some thing that don't need to be done every single sample.
-        // For example: looking at a knob position. You can save a lot of CPU if you do 
-        // this less often.
         if (loopCounter-- == 0) {
             loopCounter = 3;
             processEvery4Samples(args);
@@ -186,7 +171,6 @@ struct VCO3Module : Module
             phaseAccumulators[bank] += phaseAdvance[bank];
             phaseAccumulators[bank] -= simd::floor(phaseAccumulators[bank]);
            
-
             float_4 minBlepValue;
             if (outputSaw || outputPara) {
 
@@ -244,14 +228,10 @@ struct VCO3Module : Module
             }
 
             if (outputSin) {
-                // If the sin output it patched, turn our 0..1 ramp
-                // into a -5..+5 sine.
-                // Use fast sin approximation from VCV VCO-1
-                // NEW 4 VCO2
-              //  float_4 sinWave = float_4(5.f) * sin2pi_pade_05_5_4<float_4>( phaseAccumulators[bank]);
-            //    float_4 sinWave = phaseAccumulators[bank];
+
+                //  float_4 sinWave = float_4(5.f) * sin2pi_pade_05_5_4<float_4>( phaseAccumulators[bank]);
                 const static float twoPi = 2 * 3.141592653589793238;
-                float_4 sinWave = SquinkyLabs_sinTwoPi( phaseAccumulators[bank] * twoPi);
+                float_4 sinWave = float_4(5.f) * SquinkyLabs_sinTwoPi( phaseAccumulators[bank] * twoPi);
                 outputs[SIN_OUTPUT].setVoltageSimd(sinWave, baseChannel);
             }
         }
