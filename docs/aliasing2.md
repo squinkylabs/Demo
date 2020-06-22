@@ -27,3 +27,5 @@ If a VCO with sharp waveforms like saw and square has no alias mitigation code, 
 Here is Demo VCO1 again. This time adjusted as we describe to show the bad aliasing.
 
 ![Demo Saw full alias Frequency](./vco-1-fullalias.png)
+
+Next we will make a new VCO (Demo VCO2) to fix these issue: [link here](./vco2.md)

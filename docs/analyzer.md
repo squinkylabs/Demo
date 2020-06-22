@@ -31,3 +31,5 @@ Here we see mostly what we should see. The largest line is very close to 1kHz. I
 There are some very minor anomalies, too. All the way on the left there is a "hump". This tells us there is a small amount of DC at the output.
 
 Also we can see that above 10kHz the harmonics fall off a little faster, and there are some strange signals that are not harmonics in between 10k and 20k. But this "junk" is more than 30 decibels below the fundamental, at a very high frequency where we can't hear so well. This distortion (actually called aliasing) is probably well below the level of audibility.
+
+Next, we use the analyzer to look at the aliasing in Demo VCO1. [Link here](./aliasing.md)
