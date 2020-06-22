@@ -24,6 +24,31 @@ T sin2pi_pade_05_5_4(T x) {
 	return (T(-6.283185307) * x + T(33.19863968) * simd::pow(x, 3) - T(32.44191367) * simd::pow(x, 5))
 	       / (1 + T(1.296008659) * simd::pow(x, 2) + T(0.7028072946) * simd::pow(x, 4));
 }
+
+
+/*
+ * only accurate for 0 <= x <= two Pi
+ */
+
+inline float_4 SquinkyLabs_sinTwoPi(float_4 _x) {
+    const static float twoPi = 2 * 3.141592653589793238;
+    const static float pi =  3.141592653589793238;
+ //   _x -= SimdBlocks::ifelse((_x > float_4(pi)), float_4(twoPi), float_4::zero()); 
+    _x -= ifelse((_x > float_4(pi)), float_4(twoPi), float_4::zero()); 
+
+    float_4 xneg = _x < float_4::zero();
+    float_4 xOffset = ifelse(xneg, float_4(pi / 2.f), float_4(-pi  / 2.f));
+    xOffset += _x;
+    float_4 xSquared = xOffset * xOffset;
+    float_4 ret = xSquared * float_4(1.f / 24.f);
+    float_4 correction = ret * xSquared *  float_4(.02 / .254);
+    ret += float_4(-.5);
+    ret *= xSquared;
+    ret += float_4(1.f);
+
+    ret -= correction;
+    return ifelse(xneg, -ret, ret);    
+}
  
 // VCV has a limit of 16 channels in a polyphonic cable.
 static const int maxPolyphony = 16;
@@ -223,7 +248,10 @@ struct VCO3Module : Module
                 // into a -5..+5 sine.
                 // Use fast sin approximation from VCV VCO-1
                 // NEW 4 VCO2
-                float_4 sinWave = float_4(5.f) * sin2pi_pade_05_5_4( phaseAccumulators[bank]);
+              //  float_4 sinWave = float_4(5.f) * sin2pi_pade_05_5_4<float_4>( phaseAccumulators[bank]);
+            //    float_4 sinWave = phaseAccumulators[bank];
+                const static float twoPi = 2 * 3.141592653589793238;
+                float_4 sinWave = SquinkyLabs_sinTwoPi( phaseAccumulators[bank] * twoPi);
                 outputs[SIN_OUTPUT].setVoltageSimd(sinWave, baseChannel);
             }
         }
@@ -278,7 +306,7 @@ struct VCO3Widget : ModuleWidget {
         addOutput(createOutput<PJ301MPort>(Vec(x, paraY), module, VCO3Module::PARA_OUTPUT));
     
         // Add some quick hack labels to the panel.
-        addLabel(Vec(20, headingY), "Demo VCO2");
+        addLabel(Vec(20, headingY), "Demo VCO3");
         addLabel(Vec(x-16, inputY - labelAbove), "Pitch CV");
         addLabel(Vec(x-10, knobY - labelAbove), "Pitch");
         addLabel(Vec(x-16, sawY - labelAbove), "Saw Out");
