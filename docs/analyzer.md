@@ -8,6 +8,13 @@ The Bogaudio Analyzer XL is a very nice implementation, so we will use that here
 
 An analyzer will draw a real time graph, where the x axis is frequency, and the y axis is amount, or volume, in decibels.
 
+The Bogaudio analyzer has a lot of settings. Many of the default setting are appropriate for this sensitive measuring, but not all of them:
+
+* Quality. This defaults to "good", but set it to "ultra". Very important.
+* Window. The default Kaiser window is a good choice.
+* Amplitude range. The default 60 dB range is good. That's what we used here.
+* Frequency range. We use the default "full".
+
 Here is what white noise looks like:
 
 ![white noise](./fft-noise.png)

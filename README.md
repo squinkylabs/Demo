@@ -43,7 +43,7 @@ VCO2 functions exactly the same as VCO1, but fixed the problems identified in VC
 
 ## VCO3
 
-Again, same as VCO2, but now using the Intel SIMD instruction set to make it faster. 
+Again, same as VCO2, but now using the Intel SIMD instruction set to make it faster.
 
 ## Table of contents
 
@@ -61,6 +61,8 @@ Introducing Demo VCO2: [link here](./docs/vco2.md)
 
 Introducing Demo VCO3: [link here](./docs/vco3.md)
 
+Analysis of Demo VCO3: [link here](./docs/vco3-cpu.md)
+
 ## Summary
 
 Hopefully you read all this pages listed above, and didn't skip here immediately! In any case here are some of the points we hope we demonstrated here:
@@ -71,6 +73,8 @@ We learned that it is really easy to make a VCV module is terribly wasteful of C
 
 We also saw it is very easy to make a VCO that generates a huge amount of aliasing distortion, even without trying. The good news is that the VCV plugin SDK provides a very easy to use implementation on minBlep that can fix this, at least for VCOs like Demo.
 
-Lastly, we provided source code that can easily be re-used for someone who wants to start a pluigin "from code". The code has lots of comments in it that will hopefully make it easier for others to start writing VCV modules.
+We gave a very short introduction to SIMD coding, in particular how much it can reduce the CPU usage of a polyphonic module.
+
+Lastly, we provided source code that can easily be re-used for someone who wants to start a plugin "from code". The code has lots of comments in it that will hopefully make it easier for others to start writing VCV modules.
 
 For more on writing efficient plugins aside from the excellent info in the VCV manual, there is this paper we wrote over a year ago. It's badly in need of update to VCV 1.0, but it has been a popular source of info: [writing efficient plugins](https://github.com/squinkylabs/SquinkyVCV/blob/master/docs/efficient-plugins.md)
