@@ -1,9 +1,10 @@
 /**
- * This file contains the entire implementation of the VCO2 demo module.
+ * This file contains the entire implementation of the VCO3 demo module.
  *
- * The code for VCO2 is very, very close to the code for VCO1.
- * We have marked the few changes with:
- * NEW 4 VCO2
+ * The code for VCO3 is very, very close to the code for VCO2.
+ *
+ * We have removed may of the original comments from VCO1 and VCO2, and put
+ * in new comments for significant changes.
  * 
  */
 
@@ -17,8 +18,8 @@ using float_4 = simd::float_4;
  * one from Fundamental VCO-1. This one is a little crude, not super
  * accurate, and really could be optimized more.
  * 
- * This one is done by doing the calculations with two different 
- * equations depending on whether the radian angle is  more or less than pi.
+ * Here we do the calculations with two different 
+ * equations depending on whether the radian angle is more or less than pi.
  * 
  * The equations themselves are very simple fourth order Taylor series, with
  * an arbitrary fudge factor added into to make it more accurate.
@@ -50,14 +51,10 @@ inline float_4 SquinkyLabs_sinTwoPi(float_4 _x) {
 // VCV has a limit of 16 channels in a polyphonic cable.
 static const int maxPolyphony = 16;
 
-// Since simd processes 4 floats at once,
+// Since SIMD processes 4 floats at once,
 // we will need four banks of four to make 16 voices.
 static const int maxBanks = maxPolyphony / 4;
 
-/**
- *  Every synth module must have a Module structure.
- *  This is where all the real-time processing code goes.
- */
 struct VCO3Module : Module
 {
     enum ParamIds {
@@ -94,8 +91,6 @@ struct VCO3Module : Module
     bool outputPara = false;
 
     VCO3Module() {
-        // Your module must call config from its constructor, passing in
-        // how many ins, outs, etc... it has.
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
         configParam(PITCH_PARAM, 0, 10, 4, "Initial Pitch");
     }
@@ -110,12 +105,6 @@ struct VCO3Module : Module
     }
 
     void processEvery4Samples(const ProcessArgs& args) {
-        // Is is very important that you tell the output ports how
-        // many channels the should export. In a VCO it is very common
-        // to use the number of CV input channels to automatically determine the
-        // polyphony.
-        // It is also very common to always run one channel, even if there is
-        // no input. This lets the VCO generate output with no input.
         currentPolyphony = std::max(1, inputs[CV_INPUT].getChannels());
         currentBanks = currentPolyphony / 4;
         if (currentPolyphony % 4) {
@@ -125,8 +114,6 @@ struct VCO3Module : Module
         outputs[SAW_OUTPUT].setChannels(currentPolyphony);
         outputs[PARA_OUTPUT].setChannels(currentPolyphony);
 
-        //now we are going to look at our input and parameters and
-        // save off some values for out audio processing function.
         outputSaw = outputs[SAW_OUTPUT].isConnected();
         outputSin = outputs[SIN_OUTPUT].isConnected();
         outputPara = outputs[PARA_OUTPUT].isConnected();
@@ -143,19 +130,16 @@ struct VCO3Module : Module
             // Normal arithmetic operators work transparently with float_4.
             // Sometimes when expressions mix float_4 and float you need
             // to explicitly convert, like we do here with the number f.
+            // Other time we do it "just because".
             float_4 combinedPitch = pitchParam + pitchCV - float_4(4.f);
 
             const float_4 q = float(log2(261.626));       // move up to C
             combinedPitch += q;
 
-            // Combined pitch is in volts. Now use an exponential function
-            // to convert that to a pitch.
-            // This time we use the fast exp approximation from the VCV SDK.
-            // NEW 4 VCO2
+            // Note that because rack's approxExp2_taylor5 is templatized, it works just
+            // the same for a float_4 as it did for float.
             const float_4 freq = rack::dsp::approxExp2_taylor5<float_4>(combinedPitch);
 
-            // figure out how much to add to our ramp every cycle 
-            // to make a saw at the desired frequency.
             const float_4 normalizedFreq = float_4(args.sampleTime) * freq;
             phaseAdvance[bank] = normalizedFreq;
         }
@@ -178,7 +162,7 @@ struct VCO3Module : Module
                 // Determine if the saw "should have" already crossed .5V in the last sample period
                 // This is the SIMD version of the minBlep code from VCO2. Well, more properly it's the
                 // code from VCV Fundamental VCO-1. I find this algorithm pretty difficult to figure out
-                // in SIMD. Thank goodness the Fundamental code is such a rich well.
+                // in SIMD. Thank goodness the Fundamental code is such a rich well to draw from.
                 float_4 halfCrossing = (0.5f - (phaseAccumulators[bank] -  phaseAdvance[bank])) /  phaseAdvance[bank];
                 int halfMask = simd::movemask((0 < halfCrossing) & (halfCrossing <= 1.f));
                 if (halfMask) {
@@ -196,28 +180,18 @@ struct VCO3Module : Module
             }
 
             if (outputSaw) {
-                // NEW 4 VCO2
-                // Because of the decision mentioned above to have out
-                //output waveform have a different phase, we need to do
-                // the same arithmetic that VCV VCO-1 uses to calculate the
-                // output waveform.
                 float_4 rawSaw = phaseAccumulators[bank] + float_4(.5f);
                 rawSaw -= simd::trunc(rawSaw);
                 rawSaw = 2 * rawSaw - 1;
 
-                //  NEW 4 VCO2: add in the minBlep correction that we calculated above.
                 rawSaw += minBlepValue;
                 float_4 sawWave = float_4(5) * rawSaw;
                 outputs[SAW_OUTPUT].setVoltageSimd(sawWave, baseChannel);
             }
 
             if (outputPara) {
-                // This simple "parabolic ramp" is an example of a way one could try to 
-                // make the sawtooth sound a little different.
-                // NEW 4 VCO2: do math like we did with the saw to shift
-                // the phase so it matches the phase of the minBlep.
                 float_4 paraWave = phaseAccumulators[bank] + float_4(.5f);
-                paraWave -= simd::trunc(paraWave);       // now 0 ... 1
+                paraWave -= simd::trunc(paraWave);      // now 0 ... 1
                 paraWave *= paraWave;                   // squared, but still 0..1
                 paraWave = 2 * paraWave;                // now 0..2
                 paraWave += minBlepValue;
@@ -228,8 +202,6 @@ struct VCO3Module : Module
             }
 
             if (outputSin) {
-
-                //  float_4 sinWave = float_4(5.f) * sin2pi_pade_05_5_4<float_4>( phaseAccumulators[bank]);
                 const static float twoPi = 2 * 3.141592653589793238;
                 float_4 sinWave = float_4(5.f) * SquinkyLabs_sinTwoPi( phaseAccumulators[bank] * twoPi);
                 outputs[SIN_OUTPUT].setVoltageSimd(sinWave, baseChannel);
@@ -238,34 +210,16 @@ struct VCO3Module : Module
     }
 };
 
-/**
- * At least in VCV 1.0, every module must have a Widget, too.
- * The widget provides the user interface for a module.
- * Widgets may draw to the screen, get mouse and keyboard input, etc...
- * Widgets cannot actually process or generate audio.
- */
 struct VCO3Widget : ModuleWidget {
     VCO3Widget(VCO3Module* module) {
-        // The widget always retains a reference to the module.
-        // you must call this function first in your widget constructor.
         setModule(module);
-
-        // Typically the panel graphic is added first, then the other 
-        // UI elements are placed on TOP.
-        // In VCV the Z-order of added children is such that later
-        // children are always higher than children added earlier.
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/vco1_panel.svg")));
 
-        // VCV modules usually have image is "screws" to make them
-        // look more like physical module. You may design your own screws, 
-        // or not use screws at all.
 		addChild(createWidget<ScrewSilver>(Vec(15, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 30, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(15, 365)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 30, 365)));
 
-        // It's purely personal style whether you want to set variables like this
-        // For the position of your widgets. It's fine to do it inline also.
         float x = 50;
         float headingY = 20;
         float inputY = 75;
@@ -275,17 +229,12 @@ struct VCO3Widget : ModuleWidget {
         float paraY = 290;
         float labelAbove = 20;
 
-        // Now we place the widgets that represent the inputs, outputs, controls,
-        // and lights for the module. VCO2 does not have any lights, but does have
-        // the other widgets.
-
         addInput(createInput<PJ301MPort>(Vec(x, inputY), module, VCO3Module::CV_INPUT));
         addParam(createParam<RoundBlackKnob>(Vec(x-4, knobY), module, VCO3Module::PITCH_PARAM));
         addOutput(createOutput<PJ301MPort>(Vec(x, sawY), module, VCO3Module::SAW_OUTPUT));
         addOutput(createOutput<PJ301MPort>(Vec(x, sinY), module, VCO3Module::SIN_OUTPUT));
         addOutput(createOutput<PJ301MPort>(Vec(x, paraY), module, VCO3Module::PARA_OUTPUT));
-    
-        // Add some quick hack labels to the panel.
+
         addLabel(Vec(20, headingY), "Demo VCO3");
         addLabel(Vec(x-16, inputY - labelAbove), "Pitch CV");
         addLabel(Vec(x-10, knobY - labelAbove), "Pitch");
@@ -294,11 +243,6 @@ struct VCO3Widget : ModuleWidget {
         addLabel(Vec(x-16, paraY - labelAbove), "Para Out");
     }
 
-    // Simple helper function to add test labels to the panel.
-    // In a real module you would draw this on the panel itself.
-    // Labels are fine for hacking, but they are discouraged for real use.
-    // Some of the problems are that they don't draw particularly efficiently,
-    // and they don't give as much control as putting them into the panel SVG.
     Label* addLabel(const Vec& v, const char* str)
     {
         NVGcolor black = nvgRGB(0,0,0);
