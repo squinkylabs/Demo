@@ -4,11 +4,11 @@ We have seen that Demo VCO2 is already extremely fast. If this were a real proje
 
 ## SIMD Instructions
 
-Earlier we mentioned that the Fundamental VCO-1 uses the SIMD instructions to be much more efficient when the polyphony is 4 or more voices. Luckily since we already borrowed our complex minBlep code from Fundamental, we can easy "vectorize" it.
+Earlier we mentioned that the Fundamental VCO-1 uses the SIMD instructions to be much more efficient when polyphony is used. Luckily since we already borrowed our complex minBlep code from Fundamental, we can easy "vectorize" it.
 
 First, a little bit about this technology.
 
-SIMD is an acronym for Single Instruction Multiple Data. I means that in a single Intel instruction you can, for example, multiply four numbers by four other numbers. In the time that you could only process one instruction with the normal instructions. This is also called "vector processing", as the CPU registers are now holding vectors rather than scalars.
+SIMD is an acronym for Single Instruction Multiple Data. I means that in a single Intel instruction you can, for example, multiply four numbers by four other numbers in the time that you could only process one instruction with the normal instruction set. This is also called "vector processing", as the CPU registers are now holding vectors rather than scalars.
 
 Intel has been introducing more and more of these extensions year by year. Some of the major milestones were the original MMX, which could only handle vectors of integers (and hence not too useful for audio). SSE is the version where floating point numbers could be processed. AVX increased the vector size from 4 to 8 etc...
 
@@ -20,9 +20,9 @@ But there have always been barriers to the adoption of SIMD:
 
 Thankfully, VCV has solved the first and the last of these issues. VCV's SIMD library introduces a new data type, `float_4`, and uses extensive C++ operator overloading to make the syntax much like regular C.
 
-As to the last point, VCV has specified that VCV Rack requires certain SIMD instruction sets, and therefore any plugin that uses the same instruction sets will be guaranteed to work for any VCV user. The small downside of this,however, is that the model VCV has settled on is  pretty old, least common denominator model that covers any computer made in the last 9 years or so.  VCV has queried users to find what percentages have what vintages of computers and made a reasonable choice from that.
+As to the last point, VCV has specified that VCV Rack requires certain SIMD instruction sets, and therefore any plugin that uses the same instruction sets will be guaranteed to work for any VCV user. The small downside of this, however, is that the model VCV has settled on is pretty old, least common denominator model that covers any computer made in the last 9 years or so.  VCV has queried users to find what percentages have what vintages of computers and made a reasonable choice from that.
 
-As two the second issue, the general difficulty of the programming model - well, you just need to learn how to do it. Or copy code from someone who does. In many complex cases it's easy to write SIMD code that is actually slower than the equivalent non-SIMD code - so you need to test a lot.
+Regarding the second issue, the general difficulty of the programming model - well, you just need to learn how to do it. Or copy code from someone who does. In many complex cases it's easy to write SIMD code that is actually slower than the equivalent non-SIMD code - so you need to test a lot.
 
 But, the good news is the code provided to plugins by VCV. Most of the SIMD stuff can be found here: [SIMD Includes](https://github.com/VCVRack/Rack/tree/v1/include/simd). You are encouraged to rummage around in there. Especially `vector.hpp`.
 
@@ -30,9 +30,9 @@ But, the good news is the code provided to plugins by VCV. Most of the SIMD stuf
 
 Demo VCO3 is of course Demo VCO2 re-implemented using SIMD instructions provide by the VCV Plugin SDK. This was very straight forward, except for the minBlep part. Thankfully VCV Fundamental VCO-1 has a SIMD minBlep so we can just use that code.
 
-So we made a new plugin and tested it out. It worked fine, but something was disappointing. While the sawtooth had become four times faster, the sin was not faster at all!
+We made a new plugin and tested it out. It worked fine, but something was disappointing. While the sawtooth had become four times faster, the sin was not faster at all!
 
-Since the only complicated part of this is the sine approximation we borrowed, we shut that off. While it no longer generated a sine, it was now blindingly fast. So the problem was clearly in the sine approximation we borrowed.
+Since the only complicated part of this is the sine approximation we borrowed, we shut that off. While it no longer generated a sine, it was now blindingly fast. So the problem was clearly in the sine approximation.
 
 We noticed that the approximation code itself is fairly complicated:
 
@@ -41,7 +41,7 @@ We noticed that the approximation code itself is fairly complicated:
     / (1 + T(1.296008659) * simd::pow(x, 2) + T(0.7028072946) * simd::pow(x, 4));
 ```
 
-Maybe the GCC compiler is not able to convert this into SIMD code that will fit in the 8 registers allowed by the VCV legacy compatibility. So, as a lark, we replaced `-march=nacona` with `-march=native`, which is how you tell GCC "go crazy, use all the SIMD features of my computer".
+Maybe the GCC compiler is not able to convert this into SIMD code that will fit in the 8 registers allowed by the VCV legacy compatibility? So, as a lark, we replaced `-march=nacona` with `-march=native`, which is how you tell GCC "go crazy, use all the SIMD features of my computer".
 
 This made the result 3X faster, suggesting our theory could be correct.
 
