@@ -8,6 +8,20 @@ The Bogaudio Analyzer XL is a very nice implementation, so we will use that here
 
 An analyzer will draw a real time graph, where the x axis is frequency, and the y axis is amount, or volume, in decibels.
 
+The Bogaudio analyzer has a lot of settings. Many of the default setting are appropriate for this sensitive measuring, but not all of them:
+
+* Quality. This defaults to "good", but set it to "ultra". Very important.
+* Window. The default Kaiser window is a good choice.
+* Amplitude range. The default 60 dB range is good. That's what we used here.
+* Frequency range. We use the default "full".
+
+Analyzer XL has other settings that may be useful, check them all out.
+
+Our choice here to use the 60 dB amplitude range is motivated by a couple of factors:
+
+* It is easier to see the important details in this "zoomed in" view.
+* All of the VCOs here has some amount of "gunk" at extremely low levels. We believe this gunk is completely inaudible, and didn't want to get distracted by it.
+
 Here is what white noise looks like:
 
 ![white noise](./fft-noise.png)
@@ -31,3 +45,5 @@ Here we see mostly what we should see. The largest line is very close to 1kHz. I
 There are some very minor anomalies, too. All the way on the left there is a "hump". This tells us there is a small amount of DC at the output.
 
 Also we can see that above 10kHz the harmonics fall off a little faster, and there are some strange signals that are not harmonics in between 10k and 20k. But this "junk" is more than 30 decibels below the fundamental, at a very high frequency where we can't hear so well. This distortion (actually called aliasing) is probably well below the level of audibility.
+
+Next, we use the analyzer to look at the aliasing in Demo VCO1. [Link here](./aliasing.md)

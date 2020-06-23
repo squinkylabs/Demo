@@ -56,7 +56,7 @@ struct VCO2Module : Module
     /**
      * Reduce the aliasing by using the minBlep technique.
      * Luckily VCV SDK contains a good implementation of this.
-     * Otherwise it would be a lot of work to do it oursves.
+     * Otherwise it would be a lot of work to do it ourselves.
      * 
      * Because our para waveform jumps just like the saw,
      * at the same time, they can share the same minBlep generator.

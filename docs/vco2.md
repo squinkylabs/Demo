@@ -35,6 +35,8 @@ While we are at it, we can see that where we convert the V/Octave into a linear 
 
 None the less, VCV provides a faster function just for this purpose, so we might as well use it.
 
+Our trick of not doing the CV calculations every sample is a trade off. It saves CPU (a lot in a more realistic module), but it could make it sounds worse. In this case it means that running an audio source into the V/Octave input will sound different. For this VCO, we believe it's a good trade off, but others may disagree.
+
 Later we will talk about alias reduction, but now let's look at the CPU usage.
 
 ![VCO2 CPU](./vco-2-cpu.png)
@@ -44,6 +46,8 @@ This time we increased the patch polyphony to 16, to make the number large enoug
 The first surprising thing - almost shocking - it that Demo VCO2's sine is almost 15 times more efficient now!
 
 Another surprise is that Demo VCO2's sine is at least three times more efficient that the other VCOs. Those other VCOs do a lot of things, but at least it shows that if you want to write a dedicated VCO that just does one thing really well, it's usually possible, and not even particularly difficult.
+
+Lastly, notice that the performance of the sawtooth output is much better now. The only thing we changed that would affect Saw is using the fast approximation `approxExp2_taylor5` to replace `std::pow`. Even with the 4X strength reduction we used it's clear the `std::pow` can also be a bottleneck.
 
 Now let's look address the aliasing. There are, broadly speaking, four well known ways to deal with aliasing, all of them used in some VCV modules:
 
