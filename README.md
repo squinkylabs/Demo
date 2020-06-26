@@ -4,7 +4,7 @@ This repo contains a VCV Rack plugin which implements a few VCV Rack synthesizer
 
 ## Caveat
 
-This code and documentation is currently under active development and proofreading. It tends to change at least once a day. However please report and issues with the code or the writing.
+The source-code and documentation is currently under development. Please report any issues with the code or the writing.
 
 ## Prerequisites
 
@@ -30,12 +30,17 @@ Demo VCO1 is a very simple polyphonic VCO. It is not a particularly good one, bu
 
 This Module has several reasons to exist:
 
-* It shows how to make a VCV Rack plugin purely in code, without using the normal python plugin creator.
 * It shows some very simple algorithms for making VCO waveforms.
 * It demonstrates some of the pitfalls of overly simplistic DSP code.
 * It shows how to implement polyphony.
+* It shows how to make a VCV Rack plugin purely in code, without using the normal python plugin creator.
 
-VCO1 produces three different waveforms: sine, saw, and a mutant parabolic saw. Each waveforms comes out on a different jack.
+In most cases plugin authors will want to create their initial plugins with the python utility provided with the plugin SDK. We did it purely in code here because.
+
+* It's how we happen to make plugins.
+* Some people have expressed interest in how to make a plugin purely in code, so this project can be a reference for those developers.
+
+Demo VCOs produce three different waveforms: sine, saw, and a mutant parabolic saw. Each waveforms comes out on a different jack.
 
 ## VCO2
 
@@ -80,3 +85,9 @@ We demonstrated something that is already well known - `std::sin()` and `std::po
 Lastly, we provided source code that can easily be re-used for someone who wants to start a plugin "from code". The code has lots of comments in it that will hopefully make it easier for others to start writing VCV modules.
 
 For more on writing efficient plugins aside from the excellent info in the VCV manual, here is a paper we wrote over a year ago. It's badly in need of update to VCV 1.0, but it has been a popular source of info: [writing efficient plugins](https://github.com/squinkylabs/SquinkyVCV/blob/master/docs/efficient-plugins.md)
+
+## Addendum
+
+We have updated some of the source code in response to suggestions from other developers. In some cases these changes were not propagated to Demo VCO2 and Demo VCO3 because we didn't want to re-test everything. VCO1 now uses the `clamp` utility to keep the frequency in a legal range, so the other VCOs probably have bugs at very high pitches because they lack that fix.
+
+We added extensive comments about the decision to sub-sample the CV calculations to let people be more aware of the trade-offs involved.

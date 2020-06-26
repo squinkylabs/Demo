@@ -49,7 +49,7 @@ inline float_4 SquinkyLabs_sinTwoPi(float_4 _x) {
 }
  
 // VCV has a limit of 16 channels in a polyphonic cable.
-static const int maxPolyphony = 16;
+static const int maxPolyphony = engine::PORT_MAX_CHANNELS;
 
 // Since SIMD processes 4 floats at once,
 // we will need four banks of four to make 16 voices.
@@ -79,8 +79,8 @@ struct VCO3Module : Module
     // before are now "float_4". float_4 is a vector of four
     // floats that fits in a single CPU register an can be processed
     // all at once.
-    float_4 phaseAccumulators[maxBanks] = {0};
-    float_4 phaseAdvance[maxBanks] = {0};
+    float_4 phaseAccumulators[maxBanks] = {};
+    float_4 phaseAdvance[maxBanks] = {};
     dsp::MinBlepGenerator<16, 16, float_4> sawMinBlep[maxBanks];
 
     int currentPolyphony = 1;
@@ -96,6 +96,12 @@ struct VCO3Module : Module
     }
 
     void process(const ProcessArgs& args) override {
+        // Now that VCO3 is so fast and optimized, we could re-evaluate the decision
+        // To re-compute pitch every 4 samples. Now that time to read and write these variables
+        // to RAM will be taking a significant amount of time, whereas it you do this every
+        // sample you won't need to store the pitch information at all.
+        // For VCO3 we have found that this optimization is still significant for 16 voice polyphony,
+        // but for one to four voices it doesn't speed things up.
         if (loopCounter-- == 0) {
             loopCounter = 3;
             processEvery4Samples(args);
@@ -133,7 +139,7 @@ struct VCO3Module : Module
             // Other time we do it "just because".
             float_4 combinedPitch = pitchParam + pitchCV - float_4(4.f);
 
-            const float_4 q = float(log2(261.626));       // move up to C
+            const float_4 q = float(std::log2(261.626));       // move up to C
             combinedPitch += q;
 
             // Note that because rack's approxExp2_taylor5 is templatized, it works just
@@ -243,7 +249,7 @@ struct VCO3Widget : ModuleWidget {
         addLabel(Vec(x-16, paraY - labelAbove), "Para Out");
     }
 
-    Label* addLabel(const Vec& v, const char* str)
+    Label* addLabel(const Vec& v, const std::string& str)
     {
         NVGcolor black = nvgRGB(0,0,0);
         Label* label = new Label();

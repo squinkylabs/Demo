@@ -7,7 +7,7 @@
 #include "demo-plugin.hpp"
  
 // VCV has a limit of 16 channels in a polyphonic cable.
-static const int maxPolyphony = 16;
+static const int maxPolyphony = engine::PORT_MAX_CHANNELS;
 
 /**
  *  Every synth module must have a Module structure.
@@ -33,8 +33,8 @@ struct VCO1Module : Module
         NUM_LIGHTS
     };
 
-    float phaseAccumulators[maxPolyphony] = {0};
-    float phaseAdvance[maxPolyphony] = {0};
+    float phaseAccumulators[maxPolyphony] = {};
+    float phaseAdvance[maxPolyphony] = {};
     int currentPolyphony = 1;
     int loopCounter = 0;
     bool outputSaw = false;
@@ -53,8 +53,12 @@ struct VCO1Module : Module
     void process(const ProcessArgs& args) override {
 
         // There are usually some thing that don't need to be done every single sample.
-        // For example: looking at a knob position. You can save a lot of CPU if you do 
+        // For example: looking at a knob position. You can some CPU if you do 
         // this less often.
+        // Note that doing it like we do here will mean that running audio rate signals into the
+        // V/Octave input will sound different and arguably not "correct". We think that's a reasonable
+        // trade-off, but if you do this optimization make sure a) that you are aware of the trade-offs
+        // in your plugin, and b) that it really is speeding up your code.
         if (loopCounter-- == 0) {
             loopCounter = 3;
             processEvery4Samples(args);
@@ -85,7 +89,7 @@ struct VCO1Module : Module
             float pitchCV = inputs[CV_INPUT].getVoltage(i);
             float combinedPitch = pitchParam + pitchCV - 4.f;
 
-            const float q = float(log2(261.626));       // move up to C
+            const float q = float(std::log2(261.626));       // move up to C
             combinedPitch += q;
 
             // combined pitch is in volts. Now use the pow function
@@ -122,7 +126,7 @@ struct VCO1Module : Module
                 // into a -5..+5 sine. This  math is less easy!
 
                 // First convert 0..1 0..2pi (convert to radian angles)
-                float radianPhase = phaseAccumulators[i] * 2 * M_PI;
+                float radianPhase = phaseAccumulators[i] * 2 * float(M_PI);
 
                 // sin of 0..2pi will be a sinewave from -1 to 1.
                 // Easy to convert to -5 to +5
@@ -204,7 +208,7 @@ struct VCO1Widget : ModuleWidget {
     // Labels are fine for hacking, but they are discouraged for real use.
     // Some of the problems are that they don't draw particularly efficiently,
     // and they don't give as much control as putting them into the panel SVG.
-    Label* addLabel(const Vec& v, const char* str)
+    Label* addLabel(const Vec& v, const std::string& str)
     {
         NVGcolor black = nvgRGB(0,0,0);
         Label* label = new Label();

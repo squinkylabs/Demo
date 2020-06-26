@@ -23,7 +23,7 @@ T sin2pi_pade_05_5_4(T x) {
 }
  
 // VCV has a limit of 16 channels in a polyphonic cable.
-static const int maxPolyphony = 16;
+static const int maxPolyphony = engine::PORT_MAX_CHANNELS;
 
 /**
  *  Every synth module must have a Module structure.
@@ -49,8 +49,8 @@ struct VCO2Module : Module
         NUM_LIGHTS
     };
 
-    float phaseAccumulators[maxPolyphony] = {0};
-    float phaseAdvance[maxPolyphony] = {0};
+    float phaseAccumulators[maxPolyphony] = {};
+    float phaseAdvance[maxPolyphony] = {};
 
     
     /**
@@ -113,7 +113,7 @@ struct VCO2Module : Module
             float pitchCV = inputs[CV_INPUT].getVoltage(i);
             float combinedPitch = pitchParam + pitchCV - 4.f;
 
-            const float q = float(log2(261.626));       // move up to C
+            const float q = float(std::log2(261.626));       // move up to C
             combinedPitch += q;
 
             // Combined pitch is in volts. Now use an exponential function
@@ -124,7 +124,9 @@ struct VCO2Module : Module
 
             // figure out how much to add to our ramp every cycle 
             // to make a saw at the desired frequency.
-            const float normalizedFreq = args.sampleTime * freq;
+            // restrict the range to something reasonable to avoid bugs.
+            float normalizedFreq = args.sampleTime * freq;
+            math::clamp(normalizedFreq, 1e-6f, 0.35f);
             phaseAdvance[i] = normalizedFreq;
         }
     }
@@ -136,6 +138,8 @@ struct VCO2Module : Module
             phaseAccumulators[i] += phaseAdvance[i];
             if (phaseAccumulators[i] > 1.f) {
                 // We limit our phase to the range 0..1
+                // Note that this code assumes phaseAccumulators[i] < 1.
+                // We have clamped the values already, so we know this is true.
                 phaseAccumulators[i] -= 1.f;
             }
 
@@ -270,7 +274,7 @@ struct VCO2Widget : ModuleWidget {
     // Labels are fine for hacking, but they are discouraged for real use.
     // Some of the problems are that they don't draw particularly efficiently,
     // and they don't give as much control as putting them into the panel SVG.
-    Label* addLabel(const Vec& v, const char* str)
+    Label* addLabel(const Vec& v, const std::string& str)
     {
         NVGcolor black = nvgRGB(0,0,0);
         Label* label = new Label();
