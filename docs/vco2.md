@@ -49,7 +49,7 @@ Another surprise is that Demo VCO2's sine is at least three times more efficient
 
 Lastly, notice that the performance of the sawtooth output is much better now. The only thing we changed that would affect Saw is using the fast approximation `approxExp2_taylor5` to replace `std::pow`. Even with the 4X strength reduction we used it's clear the `std::pow` can also be a bottleneck.
 
-Now let's look address the aliasing. There are, broadly speaking, four well known ways to deal with aliasing, all of them used in some VCV modules:
+Now let's address the aliasing. There are, broadly speaking, four well known ways to deal with aliasing, all of them used in some VCV modules:
 
 * Oversampling
 * minBlep
@@ -70,7 +70,7 @@ MinBlep:
 * Is quite math intensive.
 * Requires at least a mid-level understanding of DSP.
 * Cannot be used to reduce aliasing for thru-zero-FM, or other waveforms that don't fit its model.
-* Almost no CPU at low frequencies, but the CPU load goes up linearly with frequency.
+* Uses almost no CPU at low frequencies, but the CPU load goes up linearly with frequency.
 
 Luckily for plugin developers, the VCV SDK ships with a very good implementation of minBlep, eliminating the need for a masters degree in DSP. It can still be tricky to apply it correctly, but copying VCV's VCO-1 and a bit of trial and error can make it work. For Demo VCO2 we took the minBlep code from VCV's Fundamental VCO-1 and modified it very little. In fact we modified Demo VCO2 to be more like Fundamental just to make it easier to steal the minBlep code. (And remember, it isn't stealing, it's legal and encouraged by the open source license. Just make sure you actually read the license and abide by the terms).
 
@@ -78,15 +78,17 @@ So, here is what the aliasing looks like now on Demo VCO2:
 
 ![VCO2 ALIAS](./vco-2-alias.png)
 
-Not surprisingly, it looks exactly like VCV's VCO. Which is should, since it's the same code. You will also notice that the small DC offset that we previously saw in VCO-1 has now crept into our VCO. Is must be a small flaw in the minBlep library.
+Not surprisingly, it looks exactly like VCV's VCO. Which is should, since it's the same code. You will also notice that the DC offset that we previously saw in VCO-1 has now crept into our VCO.
 
 The analyzer also shows that we succeeded in getting rid of the aliasing from our parabolic VCO with the same minBlep. Disappointingly, the analyzer also suggests that it won't sound much different that a straight saw. We included it because:
 
 * You can see that minBlep can be used with almost any waveform that consists of mostly smooth curves and abrupt steps.
 * It allowed us to do a "clever" trick to reduce CPU usage. Both the sawtooth and the parabola use the same minBlep, rather than using two, one for each.
 
-MinBlep is a large topic. Of course we can't cover all of it here. Here are some links to some of the more commonly sited papers. Of course being university research they are very heavy on the math and DSP.
+MinBlep is a large topic. Of course we can't cover all of it here. Here are some links to some of the more commonly sited papers. Being university research they are very heavy on the math and DSP.
 
 This one covers a [bunch of different techniques](https://ccrma.stanford.edu/~stilti/papers/blit.pdf).
 
 This one [focuses on minBlep](http://www.cs.cmu.edu/~eli/papers/icmc01-hardsync.pdf).
+
+Next: [Introducing VCO3](./vco3.md)

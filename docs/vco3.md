@@ -1,6 +1,6 @@
 # Demo VCO3
 
-We have seen that Demo VCO2 is already extremely fast. If this were a real project we might stop now - it's clearly "good enough". But it would be a fun challenge to make it even faster.
+We have seen that Demo VCO2 is already extremely fast. If this were a real project we might stop now - it's clearly "good enough". But it is a fun challenge to make it even faster.
 
 ## SIMD Instructions
 
@@ -8,7 +8,7 @@ Earlier we mentioned that the Fundamental VCO-1 uses the SIMD instructions to be
 
 First, a little bit about this technology.
 
-SIMD is an acronym for Single Instruction Multiple Data. I means that in a single Intel instruction you can, for example, multiply four numbers by four other numbers in the time that you could only process one instruction with the normal instruction set. This is also called "vector processing", as the CPU registers are now holding vectors rather than scalars.
+SIMD is an acronym for Single Instruction Multiple Data. It means that in a single Intel instruction you can, for example, multiply four numbers by four other numbers in the time that you could only process one instruction with the normal instruction set. This is also called "vector processing", as the CPU registers are now holding vectors rather than scalars.
 
 Intel has been introducing more and more of these extensions year by year. Some of the major milestones were the original MMX, which could only handle vectors of integers (and hence not too useful for audio). SSE is the version where floating point numbers could be processed. AVX increased the vector size from 4 to 8 etc...
 
@@ -45,7 +45,7 @@ Maybe the GCC compiler is not able to convert this into SIMD code that will fit 
 
 This made the result 3X faster, suggesting our theory could be correct.
 
-So we replace that sine approximation with one we wrote. That was able to get the 3X speedup, but didn't need the non-standard compiler flags. btw, it would be a very bad idea to put a plugin into the plugin manager that used "unofficial" compiler settings.
+So we replaced that sine approximation with one we wrote. That was able to get the 3X speedup, but didn't need the non-standard compiler flags. btw, it would be a very bad idea to put a plugin into the plugin manager that used "unofficial" compiler settings.
 
 So, we used our own approximation, reset the settings back to normal, and went on to testing.
 
