@@ -10,3 +10,7 @@ A few things are clear from this screen shot:
 
 * Our CPU usage has gone from pretty poor in Demo VCO1, to very good in Demo VCO3.
 * Demo VCO3 now seems to be quite a bit more efficient than the "comparables".
+
+Looking at the Frequency analyzer, it's also clear that we did indeed fix the DC on the sawtooth outputs.
+
+![VCO3 Spectrum](./vco-3-nodc.png)

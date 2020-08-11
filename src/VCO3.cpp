@@ -82,6 +82,7 @@ struct VCO3Module : Module
     float_4 phaseAccumulators[maxBanks] = {};
     float_4 phaseAdvance[maxBanks] = {};
     dsp::MinBlepGenerator<16, 16, float_4> sawMinBlep[maxBanks];
+    float_4 dcOffsetCompensation[maxBanks] = {};
 
     int currentPolyphony = 1;
     int currentBanks = 1;
@@ -124,6 +125,10 @@ struct VCO3Module : Module
         outputSin = outputs[SIN_OUTPUT].isConnected();
         outputPara = outputs[PARA_OUTPUT].isConnected();
 
+        // This number was determined by measuring sawtooth voltage offset
+        // It's what the offset would be at sample rate.
+        const float sawCorrect = -5.698;
+
         // Note that assigning a float to a float_4 silently copies the float into all
         // four floats in the float_4.
         float_4 pitchParam = params[PITCH_PARAM].value;
@@ -148,6 +153,9 @@ struct VCO3Module : Module
 
             const float_4 normalizedFreq = float_4(args.sampleTime) * freq;
             phaseAdvance[bank] = normalizedFreq;
+          
+            // Now scale the offset linear with frequency.
+            dcOffsetCompensation[bank] = normalizedFreq * float_4(sawCorrect);
         }
     }
 
@@ -191,6 +199,7 @@ struct VCO3Module : Module
                 rawSaw = 2 * rawSaw - 1;
 
                 rawSaw += minBlepValue;
+                rawSaw += dcOffsetCompensation[bank];       // Add in the offset voltage compensation we observed.
                 float_4 sawWave = float_4(5) * rawSaw;
                 outputs[SAW_OUTPUT].setVoltageSimd(sawWave, baseChannel);
             }

@@ -30,6 +30,10 @@ But, the good news is the code provided to plugins by VCV. Most of the SIMD stuf
 
 Demo VCO3 is of course Demo VCO2 re-implemented using SIMD instructions provide by the VCV Plugin SDK. This was very straight forward, except for the minBlep part. Thankfully VCV Fundamental VCO-1 has a SIMD minBlep so we can just use that code.
 
+As we observed earlier, the sawtooth wave has some DC on the output. The amount varies with frequency, and at high frequencies can be very high. It is definitely something that could be easily audible and high frequencies with fast envelopes, it will make a thumping or clicking sound.
+
+We are not sure where this DC comes from. Is it inherent in using minBlep on a sawtooth? Is it a flaw in the minBlep code in VCV? We don't know. But we compensated for it by calculating how much DC we expect, then subtracting this amount from the output. You can find this simple code in VCO3.cpp. Just look for the variable named `dcOffsetCompensation`
+
 We made a new plugin and tested it out. It worked fine, but something was disappointing. While the sawtooth had become four times faster, the sin was not faster at all!
 
 Since the only complicated part of this is the sine approximation we borrowed, we shut that off. While it no longer generated a sine, it was now blindingly fast. So the problem was clearly in the sine approximation.
