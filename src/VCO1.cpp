@@ -159,6 +159,14 @@ struct VCO1Widget : ModuleWidget {
         // you must call this function first in your widget constructor.
         setModule(module);
 
+        INFO("in VCO1Widget ctor 162");
+        std::string st("bac");
+        std::stringstream s;
+        s << "hello";
+        s << st;
+        INFO(s.str().c_str());
+
+
         // Typically the panel graphic is added first, then the other 
         // UI elements are placed on TOP.
         // In VCV the Z-order of added children is such that later
