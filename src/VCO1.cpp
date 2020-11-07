@@ -157,7 +157,7 @@ struct VCO1Widget : ModuleWidget {
 
     void draw(const DrawArgs &args) override
     {
-        const int size = 1000;
+        const int size = 10000;
         float x[size];
         for (int i=0; i<size; ++i) {
             x[i] = rand();
