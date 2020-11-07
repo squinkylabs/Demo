@@ -157,11 +157,23 @@ struct VCO1Widget : ModuleWidget {
 
     void draw(const DrawArgs &args) override
     {
-        float x[500];
+        const int size = 1000;
+        float x[size];
+        for (int i=0; i<size; ++i) {
+            x[i] = rand();
+        }
+
         ModuleWidget::draw(args);
         std::stringstream s;
+        s.precision(1);
         s << "draw";
+        s << 34.5657;
         INFO(s.str().c_str());
+        double d = 0;
+        for (int i=0; i<size; ++i) {
+            d += x[i] + i;
+        }
+        INFO("d = %f", d);
 
     }
     VCO1Widget(VCO1Module* module) {
