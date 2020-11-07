@@ -154,6 +154,16 @@ struct VCO1Module : Module
  * Widgets cannot actually process or generate audio.
  */
 struct VCO1Widget : ModuleWidget {
+
+    void draw(const DrawArgs &args) override
+    {
+        float x[500];
+        ModuleWidget::draw(args);
+        std::stringstream s;
+        s << "draw";
+        INFO(s.str().c_str());
+
+    }
     VCO1Widget(VCO1Module* module) {
         // The widget always retains a reference to the module.
         // you must call this function first in your widget constructor.
@@ -164,7 +174,22 @@ struct VCO1Widget : ModuleWidget {
         std::stringstream s;
         s << "hello";
         s << st;
+        s << 123.45;
+        s << " cd";
         INFO(s.str().c_str());
+
+        try {
+            INFO("throwing 33");
+            throw (33);
+
+        } catch (int i) {
+            std::stringstream s;
+            s << "caught";
+            s << i;
+            INFO(s.str().c_str());
+
+
+        }
 
 
         // Typically the panel graphic is added first, then the other 
