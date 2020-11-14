@@ -147,6 +147,35 @@ struct VCO1Module : Module
     }
 };
 
+
+class thing2
+{
+public:
+    thing2() {
+        throw (44);
+    }
+private:
+};
+
+class thing1
+{
+public:
+    thing1()
+    {
+        try {
+            p = new thing2();
+        }
+        catch (int i) {
+            INFO("caught int");
+        }
+    }
+    ~thing1() {
+        delete p;
+    }
+private:
+    thing2* p = nullptr;
+};
+
 /**
  * At least in VCV 1.0, every module must have a Widget, too.
  * The widget provides the user interface for a module.
@@ -163,20 +192,27 @@ struct VCO1Widget : ModuleWidget {
             x[i] = rand();
         }
 
+        int* ints = new int[10000];
+
+        thing1* thing = new thing1();
         std::string * p = new (std::string);
         *p += "asddsf";
 
         ModuleWidget::draw(args);
         std::stringstream s;
-        s.precision(4);
+        s.precision(2);
         s << "draw ";
         s << 34.5657;
-      //  INFO(s.str().c_str());
+        s << " and again";
+
+        INFO(s.str().c_str());
         double d = 0;
         for (int i=0; i<size; ++i) {
             d += x[i] + i;
         }
         delete p;
+        delete thing;
+        delete ints;
     //    INFO("d = %f", d);
 
     }
