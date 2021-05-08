@@ -31,11 +31,11 @@ We can see from the documentation that the function domain is 0…1 like we want
 While we are at it, we can see that where we convert the V/Octave into a linear frequency we use the standard C++ function `std::pow()`. Now, two things about this:
 
 * `std::pow()` is usually not as slow as `std::sin()`.
-* As a "pre-optimization" we are already only doing the waveform calculation every four samples.
+* As a "pre-optimization" we are already only doing the frequency calculation every four samples.
 
 Nonetheless, the VCV Rack SDK provides a faster function just for this purpose, so we might as well use it.
 
-Our trick of only doing the waveform calculations every fourth sample is a trade off. It saves CPU (a lot in a more realistic module), but it could make it sounds worse. In this case it means that running an audio source into the V/Octave input will sound different. For this VCO, we believe it's a good trade off, but others may disagree.
+Our trick of only doing the frequency calculations every fourth sample is a trade off. It saves CPU (a lot in a more realistic module), but it could make it sounds worse. In this case it means that running an audio source into the V/Octave input will sound different. For this VCO, we believe it's a good trade off, but others may disagree.
 
 Later we will talk about alias reduction, but now let's look at the CPU usage.
 

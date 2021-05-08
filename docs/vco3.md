@@ -28,7 +28,7 @@ But, the good news is the code provided in the plugins by VCV. Most of the SIMD 
 
 ## Demo VCO3
 
-Demo VCO3 is, of course, our Demo VCO2 reimplemented using SIMD instructions provide by the VCV Rack SDK. This was very straightforward, except for the minBlep part. Thankfully VCV Fundamental VCO-1 has an SIMD minBlep, so we can just use that code.
+Demo VCO3 is, of course, our Demo VCO2 reimplemented using SIMD instructions provide by the VCV Rack SDK. This was very straightforward, except for the minBlep part. Thankfully VCV Fundamental VCO-1 has a SIMD minBlep, so we can just use that code.
 
 As we observed earlier, the sawtooth wave has some DC on the output. The amount varies with frequency, and at high frequencies can be very high. It's definitely something that could be easily audible, and at high frequencies with fast envelopes it will make a thumping or clicking sound.
 
