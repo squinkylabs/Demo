@@ -2,23 +2,25 @@
 
 ## Examine on scope
 
-Since Demo VCO1 will always generate at least one channel of output, we can look at that output with the VCV Fundamental Scope without needing to make a patch which outputs audio.
+Since Demo VCO1 will always generate at least one channel of output, we can look at that output with the [VCV Fundamental Scope](https://library.vcvrack.com/Fundamental/Scope) without needing to make a patch which outputs audio.
 
 Let's look at the different waveforms using Scope:
 
-![Demo VCO1 Waveforms](./scopes.png)
+![Each of the three different waveforms output by Demo VCO1 being displayed in three VCV Fundamental Scope modules](./scopes.png)
 
 We can see some good things here. The basic shapes of all the waveforms look correct, with no obvious gaps, jumps, or other strangeness. The output voltage swings between +5V and -5V as desired (except the crazy parabolic - more on that later).
 
-Now let's check out the tuning. First - with no input (zero volts) the VCV spec says we should put out C4. Here we are using NYSTHI's Hot Tuna to check the pitch.
+Now let's check out the tuning. First - with no input (zero volts) the VCV spec says we should put out a frequency which is equivalent to a musical note at a pitch of C4, also known as [Middle C](https://en.wikipedia.org/wiki/C_(musical_note)#Middle_C).
 
-![Initial Tuning](./tuner-1.png)
+Here we are using [NYSTHI Hot Tuna](https://library.vcvrack.com/NYSTHI/HotTuna) to check the pitch:
 
-Now, let's see if it tracks at 1V/Octave like it's supposed to. Here we again use Hot Tuna to check the pitch, VCV's MIDI-CV to generate precise voltages, and NYSTHI's multivoltimetro to display the voltage.
+![Initial tuning check of Demo VCO1's sine wave using NYSTHI Hot Tuna](./tuner-1.png)
 
-![Negative 2 volts](./tuner-c2.png)
+Now, let's see if Demo VCO1's sine wave tracks at 1V/Octave like it's supposed to. Here we again use Hot Tuna to check the pitch, [VCV MIDI-CV](https://library.vcvrack.com/Core/MIDIToCVInterface) to generate precise voltages, and [NYSTHI MultiVoltimetro](https://library.vcvrack.com/NYSTHI/MultiVoltimetro) to display the voltage.
 
-![Negative 1 volt](./tuner-c3.png)
+![Negative 2 volts showing a pitch of note C2](./tuner-c2.png)
+
+![Negative 1 volt showing a pitch of note C3](./tuner-c3.png)
 
 So we see that the pitch changes by an octave when the CV changes by a volt.
 
