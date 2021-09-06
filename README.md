@@ -10,5 +10,5 @@ The other things here are some papers on different aspects of using VCV and meas
 
 1. [The demo VCOs](./demo-readme.md)
 2. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
-3. [Effect of delays using Host plugin](./docs-host-delay.md)
+3. [Effect of delays using Host plugin](./docs/host-delay.md)
 4. [Writing efficient plugins](./docs/efficient-plugins.md)
