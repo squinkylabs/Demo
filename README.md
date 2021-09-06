@@ -6,7 +6,8 @@ The "main attraction" here is a [VCV Rack](https://vcvrack.com) plugin which imp
 
 The other things here are some papers on different aspects of using VCV and measuring the performance of VCV.
 
-Here is a high level table of contents:
+## Table of contents
 
 1. [The demo VCOs](./demo-readme.md)
 2. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
+3. [Writing efficient plugins](./docs/efficient-plugins.md)
