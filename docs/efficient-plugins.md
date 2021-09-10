@@ -140,12 +140,14 @@ Following are some examples from the Squinky Labs GitHub that illustrate how we 
 ### Measurement framework
 
 It’s not easy to benchmark your plugin. Among the challenges are:
-Running your plugin outside of VCV Rack
-Taking accurate repeatable measurements.
-Fooling your compiler into not optimizing your plugin code away.
-This last one is a little non-intuitive, but if you run your code in a test harness, the compiler may see that you are always putting in zero for the input, or aren’t using the output. In that case it may realize the plugin isn’t doing anything, and generate no code for it.
-Here is our measurement framework: <https://github.com/squinkylabs/SquinkyVCV/blob/main/test/MeasureTime.h>
+
+* Running your plugin outside of VCV Rack
+* Taking accurate repeatable measurements.
+* Fooling your compiler into not optimizing your plugin code away. This one is a little non-intuitive, but if you run your code in a test harness, the compiler may see that you are always putting in zero for the input, or aren’t using the output. In that case it may realize the plugin isn’t doing anything, and generate no code for it.
+* Here is our measurement framework: <https://github.com/squinkylabs/SquinkyVCV/blob/main/test/MeasureTime.h>
+
 You can see it used in this perf suite to test Booty Shifter: <https://github.com/squinkylabs/SquinkyVCV/blob/0fd0143ed8ddfefdd00a1fd346fe0758d7307672/test/perfTest.cpp#L168>
+
 We have a strange coding style that lets us build the same code as a plugin or as a standalone testable class. There’s more info here <https://github.com/squinkylabs/SquinkyVCV/blob/main/docs/unit-test.md>
 
 ### Lookup table
@@ -156,6 +158,8 @@ Here’s a simple unit test that shows how to use the lookup table to do sines: 
 ### SSE
 
 Here’s the lag generator from Chebyshev. It uses SSE2 instructions to process four channels in the time it would otherwise take to do a single channel. <https://github.com/squinkylabs/SquinkyVCV/blob/main/dsp/filters/MultiLag.h#L101>
+
+The SSE library now in VCV is much easier to use. We now use that for all our new plugins.
 
 ### Don’t process knobs and CV every step call
 

@@ -6,7 +6,7 @@ Now, we already know that Demo VC1 has a lot of aliasing. But below is a screen 
 
 ![Bogaudio Analyzer-XL displaying a low frequency sawtooth wave signal from Demo VCO1](./vco-1-lowfreq.png)
 
-The difference here is the we are analyzing a low frequency tone. There are several things that make it difficult to see aliasing at these low frequencies:
+The difference here is that we are analyzing a low frequency tone. There are several things that make it difficult to see aliasing at these low frequencies:
 
 * Since the harmonics fall off at 6 dB per octave, the level will be fairly low by the time the harmonics are at `Fs/2`, so when they fold back and alias it will be at a lower level. So - low frequency tones will not alias nearly as much as high frequency tones.
 * By the time the plot gets to the upper frequencies, there are so many harmonics bunched together that it's difficult to see what is going on. (Dear Bogaudio. Please add a zoom feature, or some other way to look at the high frequencies).
@@ -22,7 +22,7 @@ So, to avoid getting a "false negative" when testing the quality of your own VCO
 * Use a relatively high frequency. Around 1 kHz is pretty good.
 * Adjust the pitch back and forth a little bit to get the most visible aliasing.
 
-If a VCO with sharp waveforms like saw and square has no alias mitigation code, it will almost always have the unmistakable effect in the high frequencies where it clearly folds back from `Fs/2`, and the level of the highest alias tones is about the same as the level of the real harmonics.
+If a VCO has sharp waveforms like saw and square and has no alias mitigation code, it will almost always have the unmistakable effect in the high frequencies where it clearly folds back from `Fs/2`, and the level of the highest alias tones is about the same as the level of the real harmonics.
 
 Below is Demo VCO1 again. This time adjusted as we describe to show the bad aliasing.
 

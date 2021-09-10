@@ -18,9 +18,9 @@ But there have always been barriers to the adoption of SIMD:
 * The programming model is hard to get used to. For example, conventional C++ `if` statements aren't allowed.
 * Typically you need some kind of "dynamic linking" so you could provide fallback if the user's CPU doesn't have the right SIMD instruction set.
 
-Thankfully, VCV Rack has solved the first and the last of these issues. The SIMD library in the VCV Rack SDK introduces a new data type, `float_4`, and uses extensive C++ operator overloading to make the syntax much like regular C.
+Thankfully, VCV Rack has solved the first and the last of these issues. The SIMD library in the VCV Rack SDK introduces a new data type, `float_4`, and uses extensive C++ operator overloading to make the syntax more like regular C.
 
-As to the last point, VCV has specified that VCV Rack requires certain SIMD instruction sets, and therefore any plugin that uses the same instruction sets will be guaranteed to work for any VCV user. The small downside of this, however, is that the model VCV has settled on is pretty old, least common denominator model that covers any computer made in the last 9 years or so. VCV has queried users to find what percentages have what vintages of computers and made a reasonable choice from that.
+As to the last point, VCV has specified that VCV Rack requires certain SIMD instruction sets, and therefore any plugin that uses the same instruction sets will be guaranteed to work for any VCV user. The small downside of this, however, is that the model VCV has settled on is a pretty old, least common denominator model that covers any computer made in the last 9 years or so. VCV has queried users to out find what percentages have what vintages of computers and made a reasonable choice from that.
 
 Regarding the second issue, the general difficulty of the programming model - well, you just need to learn how to do it. Or copy code from someone who does. In many complex cases it's easy to write SIMD code that is actually slower than the equivalent non-SIMD code - so you need to test a lot.
 

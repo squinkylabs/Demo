@@ -2,10 +2,6 @@
 
 This repo contains a [VCV Rack](https://vcvrack.com) plugin which implements a few VCV Rack synthesizer modules. It's intended to demonstrate how to make a basic VCV Rack plugin rather than an actual "useful" synthesizer module.
 
-## Caveat
-
-The source code and documentation in this repo are currently under development. Please report any issues with the code or the writing.
-
 ## Prerequisites
 
 If you intend to build this plugin, or any VCV plugin, you will need to set up a build environment. Please refer to [the VCV Rack manual](https://vcvrack.com/manual/) for instructions on [setting up your build environment for Windows, Mac and Linux](https://vcvrack.com/manual/Building).
@@ -14,7 +10,7 @@ The VCV Manual has a lot of [information that is useful to plugin developers](ht
 
 To build a plugin, you must have either the VCV Rack Plugin SDK (aka "VCV Rack SDK") installed correctly, or you must first build VCV Rack itself from scratch. We always build it ourselves.
 
-Most VCV Rack plugin code is written in the C++ ("C plus plus") programming language. Developing VCV Rack plugins is a great way to learn C++ and there's many free resources online to help you learn and improve your C++ knowledge, like [Learn X in Y Minutes](https://learnxinyminutes.com/docs/c++/), [LearnCPP.com](https://www.learncpp.com), and [Cprogramming.com](https://www.cprogramming.com).
+Most VCV Rack plugin code is written using the C++ ("C plus plus") programming language. Developing VCV Rack plugins is a great way to learn C++ and there are many free resources online to help you learn and improve your C++ knowledge, like [Learn X in Y Minutes](https://learnxinyminutes.com/docs/c++/), [LearnCPP.com](https://www.learncpp.com), and [Cprogramming.com](https://www.cprogramming.com).
 
 ## Tools needed to build this Demo plugin
 
@@ -65,13 +61,13 @@ Demo VCO3 functions exactly the same as Demo VCO2, but now uses the Intel SIMD i
 
 ## Summary
 
-Hopefully you will read all the pages listed above, and didn't skip here immediately! In any case, here are some of the points we hope we demonstrated in this repo…
+Hopefully you will read all the pages listed above and didn't skip here immediately! In any case, here are some of the points we hope we demonstrated in this repo…
 
 We learned how to easily measure the CPU usage and distortion of VCV modules.
 
 We learned that it's really easy to make a VCV module that's terribly wasteful of CPU. But also that it's really easy to crudely measure CPU usage, and usually very easy to fix. Another plug for [the VCV Rack manual](https://vcvrack.com/manual/) - it has an excellent section on this topic.
 
-We also saw it's very easy to make a VCO that generates a huge amount of aliasing distortion, even without trying. The good news is that the VCV Rack SDK provides a very easy to use implementation on minBlep that can fix this, at least for VCOs like those in our Demo modules.
+We also saw that it's very easy to make a VCO that generates a huge amount of aliasing distortion, even without trying. The good news is that the VCV Rack SDK provides a very easy to use implementation of minBlep that can fix this, at least for VCOs like those in our Demo modules.
 
 We gave a very short introduction to SIMD coding, in particular how much it can reduce the CPU usage of a polyphonic module.
 
@@ -79,11 +75,11 @@ We demonstrated something that is already well known - the C++ standard function
 
 Lastly, we provided source code that can easily be reused for someone who wants to start a plugin "from code". The code has lots of comments in it that will hopefully make it easier for others to start writing VCV modules.
 
-For more on writing efficient plugins, aside from the excellent info in the VCV manual, [here is a paper on writing efficient plugins](https://github.com/squinkylabs/SquinkyVCV/blob/master/docs/efficient-plugins.md) which we wrote over a year ago. It's badly in need of an update to reflect changes made in VCV Rack v1.0, but it has been a popular source of information for plugin developers and is well worth reading.
+For more on writing efficient plugins, aside from the excellent info in the VCV manual, [here is a paper on writing efficient plugins](./docs/efficient-plugins.md) which we wrote over a year ago. It's badly in need of an update to reflect changes made in VCV Rack v1.0, but it has been a popular source of information for plugin developers and is well worth reading.
 
 ## Addendum
 
-We have updated some of the source code in response to suggestions from other developers. In some cases these changes were not propagated to Demo VCO2 and Demo VCO3 because we didn't want to re-test everything.
+We have updated some of the source code in response to suggestions from other developers. In some cases, these changes were not propagated to Demo VCO2 and Demo VCO3 because we didn't want to re-test everything.
 
 Demo VCO1 now uses the VCV Rack SDK `clamp()` utility function to keep the frequency in a legal range, so the other VCOs probably have bugs at very high pitches because they lack that fix.
 
