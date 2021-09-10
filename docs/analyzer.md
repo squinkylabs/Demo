@@ -2,9 +2,9 @@
 
 This may be fairly basic, so feel free to skip ahead.
 
-A frequency analyzer is quite often the best way to visually examine your audio. It will tell you the volume of the audio at specific frequencies. Often this provides insights that would be impossible to discern by looking at the waveform on a scope.
+A frequency analyzer is quite often the best way to visually examine your audio. It will tell you the volume of the audio at specific frequencies. Often this will provide insights that would be impossible to discern by looking at the waveform on a scope.
 
-The [Bogaudio Analyzer-XL](https://library.vcvrack.com/Bogaudio/Bogaudio-AnalyzerXL) is a very nice implementation, so we will use that here.
+The [Bogaudio Analyzer-XL](https://library.vcvrack.com/Bogaudio/Bogaudio-AnalyzerXL) is a very nice implementation of a frequency analyzer, so we will use that here.
 
 An analyzer will draw a real time graph, where the x axis (going right) is frequency, and the y axis (going up) is amount, or volume, in [decibels](https://en.wikipedia.org/wiki/Decibel) (dB).
 
@@ -26,7 +26,7 @@ The screen shot below shows what the [white noise](https://en.wikipedia.org/wiki
 
 ![The Bogaudio Analyzer-XL displaying a white noise signal](./fft-noise.png)
 
-Notice that, while it is a little jagged, the height of the graph is more or less the same at all frequencies. As white noise is a random signal having equal intensity at different frequencies, that is what it should look like.
+Notice that, while it is a little jagged, the height of the graph is more or less the same at all frequencies. As white noise is a random signal that has equal intensity at different frequencies, that is what it should look like.
 
 For contrast, here is what a [sine wave](https://en.wikipedia.org/wiki/Sine_wave) output from the [VCV Fundamental VCO-1](https://library.vcvrack.com/Fundamental/VCO) module looks like in the display:
 
@@ -42,8 +42,8 @@ A sawtooth at about 1 kHz from the VCV Fundamental VCO-1 looks like this:
 
 Here we see mostly what we should see. The largest line is very close to 1 kHz. It's the fundamental. And we can see that there are harmonics at 2 kHz, 3 kHz, 4 kHz, repeating every 1 kHz to infinity. Looking at the display, we can see that the level of the harmonics falls about 6 dB every octave.
 
-There are some very minor anomalies, too. All the way to the left, from zero to around 60 Hz, there is a "hump". This tells us there is a small amount of [DC offset](https://en.wikipedia.org/wiki/DC_bias) at the output.
+There are some very minor anomalies, too. All the way to the left, from zero to around 60 Hz, there is a "hump". This tells us there is a small amount of [DC offset](https://en.wikipedia.org/wiki/DC_bias) at the output. We will get rid of that offset later.
 
-Also we can see that above 10 kHz the harmonics fall off a little faster, and there are some strange signals that are not harmonics in between 10 and 20 kHz. But this "junk" is more than 30 dB below the fundamental, at a very high frequency where we can't hear so well. This distortion (actually called [aliasing](https://en.wikipedia.org/wiki/Aliasing)) is probably well below the level of audibility.
+Also, we can see that above 10 kHz the harmonics fall off a little faster, and there are some strange signals that are not harmonics in between 10 and 20 kHz. But this "junk" is more than 30 dB below the fundamental, at a very high frequency where we can't hear so well. This distortion (actually called [aliasing](https://en.wikipedia.org/wiki/Aliasing)) is probably well below the level of audibility.
 
 Next, we use the analyzer to look at [the aliasing in Demo VCO1](./aliasing.md).

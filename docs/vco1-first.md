@@ -22,7 +22,7 @@ Now, let's see if Demo VCO1's sine wave tracks at 1V/Octave like it's supposed t
 
 ![Negative 1 volt showing a pitch of note C3](./tuner-c3.png)
 
-So we see that the pitch changes by an octave when the CV changes by a volt.
+We see that the pitch changes by an octave when the CV changes by a volt.
 
 So far, it looks like Demo VCO1 is working perfectly, but in our next session we will dig a little deeper and find some pretty bad flaws in how it works.
 
