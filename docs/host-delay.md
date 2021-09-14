@@ -6,7 +6,7 @@ Sometimes a VCV user has a choice between a "native" VCV module and a VST that d
 
 1. The native VCV solution is probably free.
 2. Host + VST will often take up more screen space.
-3. Host, by it's nature, will introduce a delay.
+3. Host, by its nature, will introduce a delay.
 
 The first two are pretty obvious, but the third one, delay, is less obvious, and perhaps not understood as well. So we will write about that.
 
@@ -20,13 +20,13 @@ This is a basic setup for measuring delay. Here we are running a low frequency s
 
 ## Does host delay?
 
-Of course it does. The “block size” menu tells you how much the output will be delayed relative to the input. You can easily measure this to verify it. Here was are using the same setup described above. Host is set for the default 128x2  (5.8 ms) block size. In this image you can see that the measured delay is quite close to what VCV Host predicts.
+Of course it does. The “block size” menu tells you how much the output will be delayed relative to the input. You can easily measure this to verify it. Here we are using the same setup described above. Host is set for the default 128x2  (5.8 ms) block size. In this image you can see that the measured delay is quite close to what VCV Host predicts.
 
 ![Single hop through host](./host-delay-simple.png)
 
 ## Do the delays add up?
 
-Of course they do. Here is the same patch with three Hosts in series. Again the measured value is pretty close to three times the value for an individual host instance:
+Of course they do. Here is the same patch with three Hosts in series. Again, the measured value is pretty close to three times the value for an individual host instance:
 
 ![Three hops through host](./host-delay-three.png)
 
@@ -60,24 +60,24 @@ This case is really the same as the VI case, as any delay added to your synth vo
 
 ### Parallel effects
 
-This one just plain will not work without a lot of effort – except as a special effect. We saw, above, that mixing host and non-host audio in parallel is going to make severe comb filtering that will be audible in many/most situations. Of course if you really want to you can add a matching delay to the other side of the chain and get them in sync again.
+This one just plain will not work without a lot of effort – except as a special effect. We saw, above, that mixing host and non-host audio in parallel is going to make severe comb filtering that will be audible in many/most situations. If you really want to you can add a matching delay to the other side of the chain and get them in sync again.
 
 And a VST that does parallel processing itself won’t have the problem.
 
 ### Effects send on a mixer
 
-If you use host on a mixer effect send, the host delay will basically become a “pre delay” on the effect. So if you are using a reverb it’s probably fine. You either won’t hear it, you will hear it and it will sound better or it will sound slightly worse and you may want to decrease the pre-delay in the reverb itself.
+If you use host on a mixer effect send, the host delay will basically become a “pre delay” on the effect. If you are using a reverb it’s probably fine. You either won’t hear it, you will hear it and it will sound better or it will sound slightly worse and you may want to decrease the pre-delay in the reverb itself.
 
 If you are using a rhythmic or slap delay on a send you can probably get it to sound right with a short host buffer setting.
 
-Just remember not to mix effect and non-effect signals - use all send an no direct, if you mixer allows it. For more on this, refer to the section above on comb filtering; and the section below on parallel effects.
+Just remember not to mix effect and non-effect signals - use all send and no direct, if your mixer allows it. For more on this, refer to the section above on comb filtering and the section on parallel effects.
 
 ## Bottom line
 
-Host is of course a great addition to VCV, and give access to a ton of great sounds. But a careful user should always keep in mind that Host is going to be adding some delay, and either adjust the patch/settings, or use Host in situations where the delay is harmless.
+Host is of course a great addition to VCV and gives you access to a ton of great sounds. But a careful user should always keep in mind that Host is going to be adding some delay, and either adjust the patch/settings, or use Host in situations where the delay is harmless.
 
-We claimed, above, that for the VI case the delay can be made un-noticeable with small buffer size settings, assuming your computer is up to it. And that this applies to VST effects added to a VCV synth voice. But if you don't pay attention to this and use large buffer settings you could end up with noticeable and objectionable delay that make your instruments sound behind the beat.
+We claimed above, that for the VI case the delay can be made un-noticeable with small buffer size settings, assuming your computer is up to it. And that this applies to VST effects added to a VCV synth voice. But if you don't pay attention to this and use large buffer settings you could end up with noticeable and objectionable delay that make your instruments sound behind the beat.
 
 We also claimed that in parallel effects cases, or when used on a mixer send in a case where the direct signal is mixed (really the same thing) that extreme comb filtering is unavoidable.
 
-Of course native VCV modules introduce only a single sample of delay.
+Of course, native VCV modules introduce only a single sample of delay.
