@@ -8,15 +8,18 @@ The "main attraction" here is a [VCV Rack](https://vcvrack.com) plugin which imp
 
 It is worth noting that the last demo in this series, VCO3, uses much less CPU that other comparable VCOs. SquinkyLabs based the BasicVCO module on this demo.
 
+As of now, the code for the Demo VCOs is for a VCV 1.x module. It has not yet been ported to VCV 2.0.
+
 The other things here are some papers on different aspects of using VCV and measuring the performance of VCV.
 
 We hope to keep general information in this repo, instead of putting it into the main SquinkyLabs VCV Module repo.
 
 ## Table of contents
 
-1. [The demo VCOs](./demo-readme.md)
-2. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
-3. [Effect of delays using Host plugin](./docs/host-delay.md)
-4. [Writing efficient plugins](./docs/efficient-plugins.md)
-5. [DC on module outputs](./docs/dc.md)
-6. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
+1. [Plugin Licensing Issues](./docs/licensing-issues.md)
+2. [The demo VCOs](./demo-readme.md)
+3. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
+4. [Effect of delays using Host plugin](./docs/host-delay.md)
+5. [Writing efficient plugins](./docs/efficient-plugins.md)
+6. [DC on module outputs](./docs/dc.md)
+7. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
