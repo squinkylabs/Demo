@@ -11,22 +11,22 @@ Often it can be a good exercise to think through different scenarios, and whethe
 3. Do you want someone to take your free code and make a paid product from it?
 4. Are you using any third party code that requires your to license your code in a certain way?
 5. If you decide you want to stop making VCV modules, do you want someone else to update your module and submit them back to the VCV library?
-6. Do you want to allow people to use your instruction manuals?
+6. Do you want to allow other developers to use your instruction manuals?
 
 With all open source projects, you have to think of many of these issues. VCV adds their own “rules of ethics”, and their own conventions for doing business. It’s probably easiest to think of these issues separately.
 
 ## A few basics of open-source licenses
 
-* The default license terms are that everything in your repo belongs to you, and no-one has any right to re-use it
+* The default license terms are that everything in your repo belongs to you, and no-one has any right to re-use it.
 * Most licenses grant some rights to re-use.
-* It is fine to license code under one set of terms, and graphics under another.
+* It is very common to license code under one set of terms, and graphics under another.
 * It is almost impossible to make your license more restrictive once you have published something under permissive terms.
-* There are quite a few libraries that require you to have a license as permissive as theirs. Libsnd is a classic example.
+* There are quite a few libraries that require you to have a license as permissive as theirs. Libsndfile is a classic example.
 * Code licenses are completely separate from trademarks and copyright.
 
 ## A few things about VCV
 
-* They do have a code of ethics that says even if something may be permitted legally, there is a certain code of conduct you must follow of they will not distribute your modules in the library.
+* They do have a code of ethics that says even if something may be permitted legally, there is a certain code of conduct you must follow or they will not distribute your modules in the library.
 * They have indicated that if you say in your license, “please don’t do this”, that they would not let someone do that.
 * The “rules” of VCV are not very clear and are not all written down in one place.
 
@@ -36,13 +36,13 @@ Above, 1) asks “do you want people to be able to use your code to make their m
 
 If you don’t want to allow that, you don’t have to. But it may limit what third party code you are allowed to use.
 
-Question 2) is more about the look of your module. Often developers don’t want a third party to copy the look of their modules. So it is very common to have a different license for your graphics and panels than for your source code.
+Question 2) is more about the look of your module. Often developers don’t want a third party to copy the look of their modules. So it is very common to have a different license for your graphics and panels than for your source code, or to assert a copyright over this visual design.
 
 A good example is VCV Rack itself. Note that there is a copyright claimed on the visual design, and it is not permitted for anyone else to build on the design of the core modules. The same is true of the Fundamental modules.
 
-It is difficult to imagine a scenario where you want to grant the right for anyone to re-use your panel designs, and possibly your control designs too. If this is the case, make sure you license does not inadvertently give someone that right.
+It is difficult to imagine a scenario where you want to grant the right for anyone to re-use your panel designs, and possibly your control designs too. If this is the case, make sure you license does not inadvertently give someone that right. Although if you would like to allow this in the case that you abandon the plugins, you should consider spelling that out in your license.
 
-Regarding 3), again, many developers don’t want someone to take their code and put it in a commercial product. Yet, this has happened in the past and it the main reason that the GNU Gpl 3 license is commonly used in modules developed for VCV.
+Regarding 3), again, many developers don’t want someone to take their code and put it in a commercial product. Yet, this has happened in the past and it the main reason that the GNU GPL 3 license is commonly used in modules developed for VCV.
 
 ## VCV written codes and conventions
 
@@ -62,14 +62,16 @@ It’s difficult to tell what these policies mean in reality, but it does sugges
 
 For example, you can put in your license “These panels all say `Acme Widget Co`. While not a registered trademark, I am not giving anyone a license to re-use it, and do not what others to submit modules to the library labeled `Acme Widget Co.` In addition, the brand field in my plugin.json is `Acme Widget Co`. I do not want anyone to use that. And I also consider my module slug `acmewidgetco-slug` is a part of my brand, and do not wish for anyone to use that slug in their modules.
 
+On the other hand, you can encourage someone to adopt your plugins in case you abandon them. Do it by granting some explicit rights in your own license file.
+
 As I say, it’s difficult to determine what VCV might do by default when presented with these scenarios, but I take them at their word that they will honor requests when possible.
 
 ## Conclusion
 
-Until you need to change it, you might consider having no license, and keeping all rights to yourself.
+Until you need to change it, or want to change it, you might consider having no license, and keeping all rights to yourself.
 
 It’s better to be explicit about what permissions you are giving people than to leave things up to chance or interpretation.
 
-If you don’t want someone to make a knock-off of your module, make sure that your license doesn’t give someone that right.
+If you don’t want someone to make a knock-off of your module, make sure that your license doesn’t give someone that right. If you **do** want to allow that, make sure you license allows it.
 
 Think carefully about what you want people to do with your source code, graphics, and text. Then make sure your license is appropriate.
