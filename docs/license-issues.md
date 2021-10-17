@@ -4,10 +4,16 @@ When you first get involved with open source software some of the licensing issu
 
 These issues get even more complex if you are making VCV modules, for a couple of reasons. One is that you are going to be making modules that will probably “compete” directly with other VCV modules, and this may affect your thinking about who you want to use your “stuff”. Also, most VCV modules are distributed through VCV’s Library. This introduces some extra complexity and considerations.
 
+## Caveat
+
+License, copyright, and trademark are complex issues. I am not a lawyer, nor an expert in this topic by any means. Hopefully this article will inspire some developers to think more about these issues. But please to not take anything in this article as expert advice.
+
+## End Of Caveat
+
 Often it can be a good exercise to think through different scenarios, and whether you want to allow or forbid them.
 
 1. Do you want people to use you code to make other VCV modules?
-2. Do you want someone to be make a module that looks exactly like yours?
+2. Do you want someone to make a module that looks exactly like yours?
 3. Do you want someone to take your free code and make a paid product from it?
 4. Are you using any third party code that requires your to license your code in a certain way?
 5. If you decide you want to stop making VCV modules, do you want someone else to update your module and submit them back to the VCV library?
@@ -17,7 +23,7 @@ With all open source projects, you have to think of many of these issues. VCV ad
 
 ## A few basics of open-source licenses
 
-* The default license terms are that everything in your repo belongs to you, and no-one has any right to re-use it.
+* The default license terms are that everything in your repo belongs to you, and no-one has any right to re-use it. However you can always state that anyway.
 * Most licenses grant some rights to re-use.
 * It is very common to license code under one set of terms, and graphics under another.
 * It is almost impossible to make your license more restrictive once you have published something under permissive terms.
@@ -60,7 +66,7 @@ It is far from clear how someone could update a module from v1 to v2 and submit 
 
 It’s difficult to tell what these policies mean in reality, but it does suggest that if you care about these issues you should speak to them in your license.
 
-For example, you can put in your license “These panels all say `Acme Widget Co`. While not a registered trademark, I am not giving anyone a license to re-use it, and do not what others to submit modules to the library labeled `Acme Widget Co.` In addition, the brand field in my plugin.json is `Acme Widget Co`. I do not want anyone to use that. And I also consider my module slug `acmewidgetco-slug` is a part of my brand, and do not wish for anyone to use that slug in their modules.
+For example, you can put in your license “These panels all say `Acme Widget Co`. While not a registered trademark, I am not giving anyone a license to re-use it, and do not want others to submit modules to the library labeled `Acme Widget Co.` In addition, the brand field in my plugin.json is `Acme Widget Co`. I do not want anyone to use that. And I also consider my module slug `acmewidgetco-slug` is a part of my brand, and do not wish for anyone to use that slug in their modules.
 
 On the other hand, you can encourage someone to adopt your plugins in case you abandon them. Do it by granting some explicit rights in your own license file.
 
@@ -68,10 +74,15 @@ As I say, it’s difficult to determine what VCV might do by default when presen
 
 ## Conclusion
 
-Until you need to change it, or want to change it, you might consider having no license, and keeping all rights to yourself.
+Until you need to change it, or want to change it, you might consider keeping all rights to yourself, and not giving away any in a license.
 
 It’s better to be explicit about what permissions you are giving people than to leave things up to chance or interpretation.
 
 If you don’t want someone to make a knock-off of your module, make sure that your license doesn’t give someone that right. If you **do** want to allow that, make sure you license allows it.
 
 Think carefully about what you want people to do with your source code, graphics, and text. Then make sure your license is appropriate.
+
+It is strongly in your interest to think through these issues as early as possible.
+
+Licensing is complex. Consider seeking out more knowledge from other developers or from the Internet.
+

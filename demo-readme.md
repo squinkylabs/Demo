@@ -2,6 +2,8 @@
 
 This repo contains a [VCV Rack](https://vcvrack.com) plugin which implements a few VCV Rack synthesizer modules. It's intended to demonstrate how to make a basic VCV Rack plugin rather than an actual "useful" synthesizer module.
 
+As of now, the code is for a VCV 1.x module. It has not yet been ported to VCV 2.0
+
 ## Prerequisites
 
 If you intend to build this plugin, or any VCV plugin, you will need to set up a build environment. Please refer to [the VCV Rack manual](https://vcvrack.com/manual/) for instructions on [setting up your build environment for Windows, Mac and Linux](https://vcvrack.com/manual/Building).
