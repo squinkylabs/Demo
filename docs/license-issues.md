@@ -34,11 +34,7 @@ With all open source projects, you have to think of many of these issues. VCV ad
 
 * They do have a code of ethics that says even if something may be permitted legally, there is a certain code of conduct you must follow or they will not distribute your modules in the library.
 * They have indicated that if you say in your license, “please don’t do this”, that they would not let someone do that.
-<<<<<<< HEAD
 * In the past there were special rules for taking over "abandoned" plugins. These have since been revoked.
-=======
-* The “rules” of VCV are not very clear and are not all written down in one place.
->>>>>>> main
 
 ## Back to open source software
 
