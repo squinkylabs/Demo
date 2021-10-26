@@ -16,7 +16,7 @@ We hope to keep general information in this repo, instead of putting it into the
 
 ## Table of contents
 
-1. [Plugin Licensing Issues](./docs/licensing-issues.md)
+1. [Plugin Licensing Issues](./docs/license-issues.md)
 2. [The demo VCOs](./demo-readme.md)
 3. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
 4. [Effect of delays using Host plugin](./docs/host-delay.md)

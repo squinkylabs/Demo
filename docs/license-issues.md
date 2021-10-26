@@ -34,7 +34,11 @@ With all open source projects, you have to think of many of these issues. VCV ad
 
 * They do have a code of ethics that says even if something may be permitted legally, there is a certain code of conduct you must follow or they will not distribute your modules in the library.
 * They have indicated that if you say in your license, “please don’t do this”, that they would not let someone do that.
+<<<<<<< HEAD
+* In the past there were special rules for taking over "abandoned" plugins. These have since been revoked.
+=======
 * The “rules” of VCV are not very clear and are not all written down in one place.
+>>>>>>> main
 
 ## Back to open source software
 
@@ -58,11 +62,14 @@ Most of the written “rules” are here: https://vcvrack.com/manual/PluginLicen
 
 >It is recommended to follow these guidelines for all plugins, but you are not legally obligated to do so. However, it is a requirement for: distributing your plugin on the VCV Library.
 
-However on the issue of “taking over” inactive plugins, Andrew has said:
+In the past, on the issue of “taking over” inactive plugins, Andrew has said:
 
 >If the original developer hasn’t responded to questions/comments in a month, I’ll consider the developer inactive. Once inactive, another developer who has made significant improvements to the plugin can adopt the project and request build updates on its VCV Library thread with the same slug/name. Of course, all IP licenses have to be followed.
 
-It is far from clear how someone could update a module from v1 to v2 and submit it as their own to the Library, but presumably it’s possible if the original module licensed the rights to all graphics and brands. Or if the module updater changes all the branding or visual elements.
+Since this rule conflicted with the main plugin ethics rule, and has never been used, it has been revoked. So, if a developer wants to take over an abandoned plugin, fork it, and re-release it to the library as is, they must either get explicit approval for that, or run afoul of the plugin ethics rule against copying a plugin.
+
+If you want to ensure that someone is, in fact, able to do this in case of your untimely "demise" (or retirement), it would be cleanest to state this in your license up-front. If, one way or another, you do not grant someone the rights to copy the look of your plugin, they will not be allowed to distribute it via the VCV library.
+ main
 
 It’s difficult to tell what these policies mean in reality, but it does suggest that if you care about these issues you should speak to them in your license.
 
@@ -70,7 +77,7 @@ For example, you can put in your license “These panels all say `Acme Widget Co
 
 On the other hand, you can encourage someone to adopt your plugins in case you abandon them. Do it by granting some explicit rights in your own license file.
 
-As I say, it’s difficult to determine what VCV might do by default when presented with these scenarios, but I take them at their word that they will honor requests when possible.
+It’s difficult to determine what VCV might do by default when presented with these scenarios, but I take them at their word that they will honor requests when possible.
 
 ## Conclusion
 
@@ -78,11 +85,10 @@ Until you need to change it, or want to change it, you might consider keeping al
 
 It’s better to be explicit about what permissions you are giving people than to leave things up to chance or interpretation.
 
-If you don’t want someone to make a knock-off of your module, make sure that your license doesn’t give someone that right. If you **do** want to allow that, make sure you license allows it.
+If you don’t want someone to make a knock-off of your module, make sure that your license doesn’t give someone that right. If you **do** want to allow that, make sure your license allows it.
 
 Think carefully about what you want people to do with your source code, graphics, and text. Then make sure your license is appropriate.
 
 It is strongly in your interest to think through these issues as early as possible.
 
 Licensing is complex. Consider seeking out more knowledge from other developers or from the Internet.
-
