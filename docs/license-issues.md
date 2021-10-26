@@ -34,7 +34,11 @@ With all open source projects, you have to think of many of these issues. VCV ad
 
 * They do have a code of ethics that says even if something may be permitted legally, there is a certain code of conduct you must follow or they will not distribute your modules in the library.
 * They have indicated that if you say in your license, “please don’t do this”, that they would not let someone do that.
+<<<<<<< HEAD
 * In the past there were special rules for taking over "abandoned" plugins. These have since been revoked.
+=======
+* The “rules” of VCV are not very clear and are not all written down in one place.
+>>>>>>> main
 
 ## Back to open source software
 
@@ -65,6 +69,7 @@ In the past, on the issue of “taking over” inactive plugins, Andrew has said
 Since this rule conflicted with the main plugin ethics rule, and has never been used, it has been revoked. So, if a developer wants to take over an abandoned plugin, fork it, and re-release it to the library as is, they must either get explicit approval for that, or run afoul of the plugin ethics rule against copying a plugin.
 
 If you want to ensure that someone is, in fact, able to do this in case of your untimely "demise" (or retirement), it would be cleanest to state this in your license up-front. If, one way or another, you do not grant someone the rights to copy the look of your plugin, they will not be allowed to distribute it via the VCV library.
+ main
 
 It’s difficult to tell what these policies mean in reality, but it does suggest that if you care about these issues you should speak to them in your license.
 
