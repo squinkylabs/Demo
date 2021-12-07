@@ -11,4 +11,5 @@ void init(rack::Plugin* p) {
 	p->addModel(modelVCO1);
 	p->addModel(modelVCO2);
 	p->addModel(modelVCO3);
+	p->addModel(modelFILTER1);
 }

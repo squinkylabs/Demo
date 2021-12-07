@@ -23,6 +23,12 @@
 			"name": "VCO3",
 			"description": "SIMD VCO",
 			"tags": ["VCO", "Polyphonic"]
+        },
+		{
+			"slug": "demo-filter1",
+			"name": "FILTER1",
+			"description": "LPF",
+			"tags": ["FILTER"]
         }
     ]
 }
