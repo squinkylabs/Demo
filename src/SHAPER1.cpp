@@ -8,7 +8,7 @@
  *  Every synth module must have a Module structure.
  *  This is where all the real-time processing code goes.
  */
-struct FILTER1Module : Module
+struct SHAPER1Module : Module
 {
     enum ParamIds {
         NUM_PARAMS
@@ -26,7 +26,7 @@ struct FILTER1Module : Module
     };
 
     Filter6PButter filter;
-    FILTER1Module() {
+    SHAPER1Module() {
         // Your module must call config from its constructor, passing in
         // how many ins, outs, etc... it has.
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
@@ -50,8 +50,8 @@ struct FILTER1Module : Module
  * Widgets may draw to the screen, get mouse and keyboard input, etc...
  * Widgets cannot actually process or generate audio.
  */
-struct FILTER1Widget : ModuleWidget {
-    FILTER1Widget(FILTER1Module* module) {
+struct SHAPER1Widget : ModuleWidget {
+    SHAPER1Widget(SHAPER1Module* module) {
         // The widget always retains a reference to the module.
         // you must call this function first in your widget constructor.
         setModule(module);
@@ -81,8 +81,8 @@ struct FILTER1Widget : ModuleWidget {
         // Now we place the widgets that represent the inputs, outputs, controls,
         // and lights for the module. VCO1 does not have any lights, but does have
         // the other widgets.
-        addInput(createInput<PJ301MPort>(Vec(x, inputY), module, FILTER1Module::INPUT));
-        addOutput(createOutput<PJ301MPort>(Vec(x, outputY), module, FILTER1Module::OUTPUT));
+        addInput(createInput<PJ301MPort>(Vec(x, inputY), module, SHAPER1Module::INPUT));
+        addOutput(createOutput<PJ301MPort>(Vec(x, outputY), module, SHAPER1Module::OUTPUT));
     
         // Add some quick hack labels to the panel.
         addLabel(Vec(20, headingY), "Demo Filter1");
@@ -112,6 +112,6 @@ struct FILTER1Widget : ModuleWidget {
 // plugin.json in the entry for corresponding plugin.
 
 // This line basically tells VCV Rack:
-// I'm called "demo-filter1", my module is FILTER1Module, and my Widget is FILTER1Widget.
+// I'm called "demo-filter1", my module is SHAPER1Module, and my Widget is SHAPER1Widget.
 // In effect, it implements a module factory.
-Model* modelFILTER1 = createModel<FILTER1Module, FILTER1Widget>("demo-filter1");
+Model* modelSHAPER1 = createModel<SHAPER1Module, SHAPER1Widget>("demo-filter1");
