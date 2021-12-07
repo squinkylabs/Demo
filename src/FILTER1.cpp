@@ -5,6 +5,7 @@
  */
 
 #include "demo-plugin.hpp"
+#include "Filter6PButter.h"
  
 // VCV has a limit of 16 channels in a polyphonic cable.
 static const int maxPolyphony = engine::PORT_MAX_CHANNELS;
@@ -16,36 +17,34 @@ static const int maxPolyphony = engine::PORT_MAX_CHANNELS;
 struct FILTER1Module : Module
 {
     enum ParamIds {
-        PITCH_PARAM,
         NUM_PARAMS
 	};
 	enum InputIds {
-        CV_INPUT,
+        INPUT,
         NUM_INPUTS
 	};
 	enum OutputIds {
-        SAW_OUTPUT,
-        SIN_OUTPUT,
-        PARA_OUTPUT,
+        OUTPUT,
         NUM_OUTPUTS
 	};
 	enum LightIds {
         NUM_LIGHTS
     };
 
-    float phaseAccumulators[maxPolyphony] = {};
-    float phaseAdvance[maxPolyphony] = {};
-    int currentPolyphony = 1;
+  //  float phaseAccumulators[maxPolyphony] = {};
+  //  float phaseAdvance[maxPolyphony] = {};
+  //  int currentPolyphony = 1;
     int loopCounter = 0;
-    bool outputSaw = false;
-    bool outputSin = false;
-    bool outputPara = false;
+
+    Filter6PButter filter;
+
 
     FILTER1Module() {
         // Your module must call config from its constructor, passing in
         // how many ins, outs, etc... it has.
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-        configParam(PITCH_PARAM, 0, 10, 4, "Initial Pitch");
+        //configParam(PITCH_PARAM, 0, 10, 4, "Initial Pitch");
+        filter.setCutoffFreq(.1f);
     }
 
     // Every Module has a process function. This is called once every
@@ -59,14 +58,19 @@ struct FILTER1Module : Module
         // V/Octave input will sound different and arguably not "correct". We think that's a reasonable
         // trade-off, but if you do this optimization make sure a) that you are aware of the trade-offs
         // in your plugin, and b) that it really is speeding up your code.
+    #if 0
         if (loopCounter-- == 0) {
             loopCounter = 3;
             processEvery4Samples(args);
         }
+    #endif
 
-        generateOutput();
+       // generateOutput();
+
     }
 
+
+#if 0
     void processEvery4Samples(const ProcessArgs& args) {
         // Is is very important that you tell the output ports how
         // many channels the should export. In a VCO it is very common
@@ -103,6 +107,8 @@ struct FILTER1Module : Module
             phaseAdvance[i] = normalizedFreq;
         }
     }
+
+
 
     void generateOutput() {
         for (int i = 0; i < currentPolyphony; ++i) {
@@ -145,6 +151,7 @@ struct FILTER1Module : Module
             }
         }
     }
+#endif
 };
 
 /**
@@ -178,29 +185,20 @@ struct FILTER1Widget : ModuleWidget {
         float x = 50;
         float headingY = 20;
         float inputY = 75;
-        float knobY = 130;
-        float sawY = 190;
-        float sinY = 240;
-        float paraY = 290;
+        float outputY = 140;
         float labelAbove = 20;
 
         // Now we place the widgets that represent the inputs, outputs, controls,
         // and lights for the module. VCO1 does not have any lights, but does have
         // the other widgets.
 
-        addInput(createInput<PJ301MPort>(Vec(x, inputY), module, FILTER1Module::CV_INPUT));
-        addParam(createParam<RoundBlackKnob>(Vec(x-4, knobY), module, FILTER1Module::PITCH_PARAM));
-        addOutput(createOutput<PJ301MPort>(Vec(x, sawY), module, FILTER1Module::SAW_OUTPUT));
-        addOutput(createOutput<PJ301MPort>(Vec(x, sinY), module, FILTER1Module::SIN_OUTPUT));
-        addOutput(createOutput<PJ301MPort>(Vec(x, paraY), module, FILTER1Module::PARA_OUTPUT));
+        addInput(createInput<PJ301MPort>(Vec(x, inputY), module, FILTER1Module::INPUT));
+        addOutput(createOutput<PJ301MPort>(Vec(x, outputY), module, FILTER1Module::OUTPUT));
     
         // Add some quick hack labels to the panel.
-        addLabel(Vec(20, headingY), "Demo VCO1");
-        addLabel(Vec(x-16, inputY - labelAbove), "Pitch CV");
-        addLabel(Vec(x-10, knobY - labelAbove), "Pitch");
-        addLabel(Vec(x-16, sawY - labelAbove), "Saw Out");
-        addLabel(Vec(x-16, sinY - labelAbove), "Sin Out");
-        addLabel(Vec(x-16, paraY - labelAbove), "Para Out");
+        addLabel(Vec(20, headingY), "Demo Filter1");
+        addLabel(Vec(x-5, outputY - labelAbove), "Out");
+        addLabel(Vec(x-1, inputY - labelAbove), "In");
     }
 
     // Simple helper function to add test labels to the panel.
