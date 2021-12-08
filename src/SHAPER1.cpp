@@ -4,13 +4,6 @@
 #include "OverSamplingShaper.h"
 #include "demo-plugin.hpp"
 
-#if 0
-float dumbChopper(float x) {
-    const float thresh = 0;       // was 4.5
-    return (x > thresh) ? 5 : -.1;
-}
-#endif
-
 float dumbChopper(float x) {
     x *= 10;
     x = std::max(x, -5.f);
@@ -54,14 +47,11 @@ struct SHAPER1Module : Module {
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
     }
 
-    // Every Module has a process function. This is called once every
-    // sample, and must service all the inputs and outputs of the module.
     void process(const ProcessArgs& args) override {
         const float input = inputs[INPUT].value;
         const float output = shaper.process(input);
-        outputs[OVERSAMPLED_OUTPUT].value = output;
-        // outputs[OVERSAMPLED_OUTPUT].value = dumbChopper(input);
 
+        outputs[OVERSAMPLED_OUTPUT].value = output;
         outputs[DIRTY_OUTPUT].value = dumbChopper(input);
     }
 };
@@ -137,6 +127,6 @@ struct SHAPER1Widget : ModuleWidget {
 // plugin.json in the entry for corresponding plugin.
 
 // This line basically tells VCV Rack:
-// I'm called "demo-filter1", my module is SHAPER1Module, and my Widget is SHAPER1Widget.
+// I'm called "demo-shaper1", my module is SHAPER1Module, and my Widget is SHAPER1Widget.
 // In effect, it implements a module factory.
 Model* modelSHAPER1 = createModel<SHAPER1Module, SHAPER1Widget>("demo-shaper1");
