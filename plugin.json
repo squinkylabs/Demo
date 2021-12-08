@@ -29,6 +29,12 @@
 			"name": "FILTER1",
 			"description": "LPF",
 			"tags": ["FILTER"]
+        },
+		{
+			"slug": "demo-shaper1",
+			"name": "SHAPER1",
+			"description": "LPF",
+			"tags": ["FILTER"]
         }
     ]
 }
