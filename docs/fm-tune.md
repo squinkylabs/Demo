@@ -33,8 +33,10 @@ You can see that both of the VCOs got more harmonics by virtue of the linear FM/
 
 You can see also the the shape of the spectra are different, too. The harmonics on the FM VCO fall off much faster then on the PM VCO. This is due to differences between PM and FM, but it's not a very realistic patch. Rarely would one use a sawtooth for a modulator.
 
-Note that as expected, if we add a DC block module at the FM input we can avoid this out of tune. As we said, the shift in pitch is caused by DC on the input. FM is very sensitive to it, and PM is immune to it.
+As expected, if we add a DC block module at the FM input we can avoid this out of tune. As we said, the shift in pitch is caused by DC on the input. FM is very sensitive to it, and PM is immune to it.
 
 ![With DC Block](./fm-dc-block.png)
 
-Note that even with the DC block the FM is very slightly out of tune. I suspect this is a small imperfection in the DC block, but I'm not sure.
+Note that even with the DC block the FM is new completely in tune.
+
+The next page shows how [FM changes spectrum with frequency](./fm-spectrum.md).
