@@ -35,6 +35,12 @@
 			"name": "SHAPER1",
 			"description": "LPF",
 			"tags": ["FILTER"]
+        },
+		{
+			"slug": "demo-vcob1",
+			"name": "VCO B",
+			"description": "Oversampling VCO",
+			"tags": ["VCO"]
         }
     ]
 }
