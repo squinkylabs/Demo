@@ -68,21 +68,28 @@ struct VCOB1Module : Module {
     }
 
     void updateParams(const ProcessArgs& args) {
-        phaseAdvanceTest = computePhaseAdvance(args.sampleTime);
-        phaseAdvanceMain = computePhaseAdvance(args.sampleTime);
+        const float x = computePhaseAdvance(args.sampleTime);
+        phaseAdvanceTest = x;
+        phaseAdvanceMain = x / 4.f;
     }
 
     void doOutput() {
-        generateBasic();
-        generatePartialOversample1();
+        generateBasic(TEST_OUTPUT);
+        generatePartialOversample2(MAIN_OUTPUT);
     }
 
-    void generateBasic() {
+    void generateBasic(int output) {
         advancePhase( phaseAccumulatorTest, phaseAdvanceTest);
         float sawWave = phaseToSaw(phaseAccumulatorTest);
-        outputs[TEST_OUTPUT].setVoltage(sawWave, 0);
+        outputs[output].setVoltage(sawWave, 0);
     }
 
+    void generatePartialOversample2(int output) { 
+        advancePhase( phaseAccumulatorMain, phaseAdvanceMain);
+        float sawWave = phaseToSaw(phaseAccumulatorMain);
+        outputs[output].setVoltage(sawWave, 0);
+    }
+    // this one zero stuffs a saw. not the right way to do it
     void generatePartialOversample1() {
         float output = 0;
         if (oversampleCounter-- == 0) {
@@ -104,9 +111,12 @@ struct VCOB1Module : Module {
     }
 
     static float phaseToSaw(float phase) {
-        // return (phase - .5f) * 10;
+         return (phase - .5f) * 10;
+
+         #if 0  // triangle
         float x = phase > .5 ? (1 - phase) : phase;
         return (x - .25) * 10;
+        #endif
     }
 
     float computePhaseAdvance(float sampleTime) {
