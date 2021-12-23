@@ -3,6 +3,9 @@
 # point to it here.
 RACK_DIR ?= ../..
 
+# Specify extra directories to search for include files.
+FLAGS += -I./dsp
+
 # Add .cpp and .c files to the build
 # This says "all cpp files are in the src folder. You can add more files
 # to that folder and they will get compiled and linked also.

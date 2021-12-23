@@ -1,6 +1,5 @@
 #include "demo-plugin.hpp"
 
-
 Plugin* pluginInstance;
 
 void init(rack::Plugin* p) {
@@ -11,4 +10,7 @@ void init(rack::Plugin* p) {
 	p->addModel(modelVCO1);
 	p->addModel(modelVCO2);
 	p->addModel(modelVCO3);
+	p->addModel(modelFILTER1);
+	p->addModel(modelSHAPER1);
+	p->addModel(modelVCOB1);
 }
