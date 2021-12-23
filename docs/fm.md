@@ -6,9 +6,11 @@ In this document, when we say "FM" we always mean through zero liner FM. And whe
 
 People who know a bit about DSP or physics know that phase and frequency are closely related by simple calculus:
 
-frequency = change in phase with respect to time ( dp / dp)
+```text
+frequency = change in phase with respect to time ( dp / dt)
 
 phase = integral over time of frequency
+```
 
 This suggests that FM and PM can sound the same if the modulator signal is properly filtered, which is true. But most often these modulators are not filtered, and hence they can sound very different.
 

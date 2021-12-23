@@ -14,6 +14,8 @@ The other things here are some papers on different aspects of using VCV and meas
 
 We hope to keep general information in this repo, instead of putting it into the main SquinkyLabs VCV Module repo.
 
+New: There are two new modules, FILTER1 and SHAPER1. They are not documented yet. SHAPER1 shows how easy it is to create an oversampling wave-shaper with low aliasing.
+
 ## Table of contents
 
 1. [Plugin Licensing Issues](./docs/license-issues.md)

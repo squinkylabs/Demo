@@ -9,7 +9,7 @@
  */
 
 #include "demo-plugin.hpp"
-#include <simd/vector.hpp>
+// #include <simd/Vector.hpp>
 
 using float_4 = simd::float_4;
 

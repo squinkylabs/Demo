@@ -4,9 +4,10 @@
  * it is rarely done.
  */
 
+#include "Filter6PButter.h"
 #include "demo-plugin.hpp"
 
-#define OVERSAMPLING_FACTOR 8
+#define OVERSAMPLING_FACTOR 1024
 
 /**
  *  Every synth module must have a Module structure.
@@ -34,6 +35,9 @@ struct VCOB1Module : Module {
     float phaseAdvanceTest = 0;
     float phaseAccumulatorMain = 0;
     float phaseAdvanceMain = 0;
+    float lastRate = 0;
+
+    Filter6PButter filter;
 
     // int loopCounter = 0;
     int oversampleCounter = 1;
@@ -48,21 +52,12 @@ struct VCOB1Module : Module {
     // Every Module has a process function. This is called once every
     // sample, and must service all the inputs and outputs of the module.
     void process(const ProcessArgs& args) override {
-#if 0
-        // There are usually some thing that don't need to be done every single sample.
-        // For example: looking at a knob position. You can some CPU if you do 
-        // this less often.
-        // Note that doing it like we do here will mean that running audio rate signals into the
-        // V/Octave input will sound different and arguably not "correct". We think that's a reasonable
-        // trade-off, but if you do this optimization make sure a) that you are aware of the trade-offs
-        // in your plugin, and b) that it really is speeding up your code.
-        if (loopCounter-- == 0) {
-            loopCounter = 3;
-            processEvery4Samples(args);
+        float rate = args.sampleRate;
+        if (rate != lastRate) {
+            lastRate = rate;
+            filter.setCutoffFreq(1.f / (OVERSAMPLING_FACTOR * 4));
         }
 
-        generateOutput();
-#endif
         updateParams(args);
         doOutput();
     }
@@ -70,40 +65,67 @@ struct VCOB1Module : Module {
     void updateParams(const ProcessArgs& args) {
         const float x = computePhaseAdvance(args.sampleTime);
         phaseAdvanceTest = x;
-        phaseAdvanceMain = x / 4.f;
+        phaseAdvanceMain = x / OVERSAMPLING_FACTOR;
     }
 
     void doOutput() {
         generateBasic(TEST_OUTPUT);
-        generatePartialOversample2(MAIN_OUTPUT);
+        generateOversample(MAIN_OUTPUT);
     }
 
+    // regular saw, no anti alias
     void generateBasic(int output) {
-        advancePhase( phaseAccumulatorTest, phaseAdvanceTest);
+        advancePhase(phaseAccumulatorTest, phaseAdvanceTest);
         float sawWave = phaseToSaw(phaseAccumulatorTest);
         outputs[output].setVoltage(sawWave, 0);
     }
 
-    void generatePartialOversample2(int output) { 
-        advancePhase( phaseAccumulatorMain, phaseAdvanceMain);
+    // basically a straight saw shifted down by OVERSAMPLING_FACTOR,
+    // then filtered to 1 / O_F * 4
+    // then decimated by thowing away samples
+    void generateOversample(int output) {
+        float sawWave = 0;
+        for (int i = 0; i < OVERSAMPLING_FACTOR; ++i) {
+            advancePhase(phaseAccumulatorMain, phaseAdvanceMain);
+            sawWave = phaseToSaw(phaseAccumulatorMain);
+            sawWave = filter.process(sawWave);
+        }
+        outputs[output].setVoltage(sawWave, 0);
+    }
+    // basically a straight saw shifted down by OVERSAMPLING_FACTOR,
+    // then filtered to 1 / O_F * 4
+    void generateOversampleFilter(int output) {
+        advancePhase(phaseAccumulatorMain, phaseAdvanceMain);
+        float sawWave = phaseToSaw(phaseAccumulatorMain);
+        sawWave = filter.process(sawWave);
+        outputs[output].setVoltage(sawWave, 0);
+    }
+
+    // basically a straight saw shifted down by OVERSAMPLING_FACTOR
+    void generatePartialOversample2(int output) {
+        advancePhase(phaseAccumulatorMain, phaseAdvanceMain);
         float sawWave = phaseToSaw(phaseAccumulatorMain);
         outputs[output].setVoltage(sawWave, 0);
     }
+
     // this one zero stuffs a saw. not the right way to do it
     void generatePartialOversample1() {
         float output = 0;
+        float sum = 0;
         if (oversampleCounter-- == 0) {
             oversampleCounter = (OVERSAMPLING_FACTOR - 1);
 
             advancePhase(phaseAccumulatorMain, phaseAdvanceMain);
             output = phaseToSaw(phaseAccumulatorMain);  // * OVERSAMPLING_FACTOR;
+            sum += output;
         }
         // float sawWave = phaseToSaw(phaseAccumulatorMain);
-        outputs[MAIN_OUTPUT].setVoltage(output, 0);
+        outputs[MAIN_OUTPUT].setVoltage(sum / OVERSAMPLING_FACTOR, 0);
     }
 
     static void advancePhase(float& accumulator, const float& phaseAdvance) {
         accumulator += phaseAdvance;
+        // was >
         if (accumulator > 1.f) {
             // We limit our phase to the range 0..1
             accumulator -= 1.f;
@@ -111,12 +133,12 @@ struct VCOB1Module : Module {
     }
 
     static float phaseToSaw(float phase) {
-         return (phase - .5f) * 10;
+        return (phase - .5f) * 10;
 
-         #if 0  // triangle
+#if 0  // triangle
         float x = phase > .5 ? (1 - phase) : phase;
         return (x - .25) * 10;
-        #endif
+#endif
     }
 
     float computePhaseAdvance(float sampleTime) {

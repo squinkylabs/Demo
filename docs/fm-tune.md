@@ -29,7 +29,7 @@ Now let's turn up the linear FM/PM to get some harmonics, and see what happens.
 
 ![Same patch with mod](./fm-out-of-tune.png)
 
-You can see that both of the VCOs got more harmonics by virtue of the linear FM/PM that we have applied. But notice also that the FM VCO (middle) is not very far out of tune - a whole semitone. But the PM VCO at the bottom has not changed the fundamental pitch at all, it's still in tune.
+You can see that both of the VCOs got more harmonics by virtue of the linear FM/PM that we have applied. But notice also that the FM VCO (middle) is now very far out of tune - a whole semitone. But the PM VCO at the bottom has not changed the fundamental pitch at all, it's still in tune.
 
 You can see also the the shape of the spectra are different, too. The harmonics on the FM VCO fall off much faster then on the PM VCO. This is due to differences between PM and FM, but it's not a very realistic patch. Rarely would one use a sawtooth for a modulator.
 
@@ -37,6 +37,6 @@ As expected, if we add a DC block module at the FM input we can avoid this out o
 
 ![With DC Block](./fm-dc-block.png)
 
-Note that even with the DC block the FM is new completely in tune.
+Note that with the DC block the FM is now completely in tune.
 
 The next page shows how [FM changes spectrum with frequency](./fm-spectrum.md).
