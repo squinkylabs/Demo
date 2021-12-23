@@ -25,3 +25,4 @@ New: There are two new modules, FILTER1 and SHAPER1. They are not documented yet
 5. [Writing efficient plugins](./docs/efficient-plugins.md)
 6. [DC on module outputs](./docs/dc.md)
 7. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
+8. [Comparing FM and Phase Modulation](./docs/fm.md)
