@@ -26,3 +26,4 @@ New: There are two new modules, FILTER1 and SHAPER1. They are not documented yet
 6. [DC on module outputs](./docs/dc.md)
 7. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
 8. [Comparing FM and Phase Modulation](./docs/fm.md)
+9. [Portable Sequence Format for clipboard](./docs/clipboard-format.md)
