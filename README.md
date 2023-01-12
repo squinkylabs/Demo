@@ -1,6 +1,6 @@
 # Demo
 
-This GitHub repo contains a variety of documents and source code that will hopefully be useful or interesting to plugin developers and curious users. Much of it can be read online right here. The source code only needs to be downloaded ("cloned", it git-speak) if you wish to build or modify any of the code.
+This GitHub repo contains a variety of documents and source code that will hopefully be useful or interesting to plugin developers and curious users. Much of it can be read online right here. The source code only needs to be downloaded ("cloned", in git-speak) if you wish to build or modify any of the code.
 
 While this repo is created, owned, and maintained by SquinkyLabs, there is little here that is about SquinkyLabs modules, and no information that is specific to SquinkyLabs. It is intended to be general.
 
