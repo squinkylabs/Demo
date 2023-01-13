@@ -14,17 +14,17 @@ The other things here are some papers on different aspects of using VCV and meas
 
 We hope to keep general information in this repo, instead of putting it into the main SquinkyLabs VCV Module repo.
 
-New: There are two new modules, FILTER1 and SHAPER1. They are not documented yet. SHAPER1 shows how easy it is to create an oversampling wave-shaper with low aliasing.
+New: There are two new modules, FILTER1 and SHAPER1. They mainly show how to use oversampling in VCV.
 
 ## Table of contents
 
 1. [The demo VCOs](./demo-readme.md)
 2. [The oversampled distortion and filter](./docs/oversample-readme.md)
-2. [Writing efficient plugins](./docs/efficient-plugins.md)
-3. [DC on module outputs](./docs/dc.md)
-4. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
-5. [Comparing FM and Phase Modulation](./docs/fm.md)
-6. [Portable Sequence Format for clipboard](./docs/clipboard-format.md)
-7. [Effect of delays using Host plugin](./docs/host-delay.md)
-8. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
-9. [Plugin Licensing Issues](./docs/license-issues.md)
+3. [Writing efficient plugins](./docs/efficient-plugins.md)
+4. [DC on module outputs](./docs/dc.md)
+5. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
+6. [Comparing FM and Phase Modulation](./docs/fm.md)
+7. [Portable Sequence Format for clipboard](./docs/clipboard-format.md)
+8. [Effect of delays using Host plugin](./docs/host-delay.md)
+9. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
+10. [Plugin Licensing Issues](./docs/license-issues.md)
