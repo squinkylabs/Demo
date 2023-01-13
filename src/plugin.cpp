@@ -12,5 +12,4 @@ void init(rack::Plugin* p) {
 	p->addModel(modelVCO3);
 	p->addModel(modelFILTER1);
 	p->addModel(modelSHAPER1);
-	p->addModel(modelVCOB1);
 }

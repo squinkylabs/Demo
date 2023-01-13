@@ -19,6 +19,7 @@ New: There are two new modules, FILTER1 and SHAPER1. They are not documented yet
 ## Table of contents
 
 1. [The demo VCOs](./demo-readme.md)
+2. [The oversampled distortion and filter](./docs/oversample-readme.md)
 2. [Writing efficient plugins](./docs/efficient-plugins.md)
 3. [DC on module outputs](./docs/dc.md)
 4. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
