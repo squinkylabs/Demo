@@ -19,7 +19,7 @@ public:
     //
     //  2) The VCV biquad let's you set if up by specifying a type of response, a frequency, a "Q", and a gain.
     //  we use 1 for the gain, and the caller specifies the cutoff. We tell VCV we want a LOWPASS filter, which
-    //  it interprets as "two pole lowpass". And we pass in these magic numbers for "Q". There are ways you
+    //  it interprets as "two pole low pass". And we pass in these magic numbers for "Q". There are ways you
     //  could derive these numbers yourself, but they are difficult and error prone is you aren't good at math.
     //  It's much easier to look them up.
     //

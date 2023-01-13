@@ -44,6 +44,7 @@ struct FILTER1Module : Module
     void process(const ProcessArgs& args) override {
 
         const float input = inputs[INPUT].value;
+        // All we are doing is running the input though our filter.
         const float output = filter.process(input);
         outputs[OUTPUT].value = output;
     }

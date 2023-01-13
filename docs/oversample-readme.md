@@ -27,4 +27,11 @@ This is also handy, as the VCV SDK has nice filters in it, but you are pretty mu
 That said, there are most likely other filters that work "better".
 
 ## Demo Filter1
-Since the oversampler will use a filter, we first made a module to do just the filtering.
+
+Since the over-sampler will use a filter, we first made a module to do just the filtering.
+
+## Demo Shaper1
+
+Here we made a clipper that uses oversampling to reduce the aliasing. It has outputs both with and without the oversampling, so that it's easy to compare.
+
+There are many ways in software to make an oversampling effect. The way we did it by putting it all in a utility class makes it easy to show how simple this it. In a "real" module one would probably architect things differently.

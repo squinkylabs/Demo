@@ -4,13 +4,24 @@
 #include "OverSamplingShaper.h"
 #include "demo-plugin.hpp"
 
+
+/**
+ * a very simple clipper. 
+ */
 float dumbChopper(float x) {
-    x *= 10;
-    x = std::max(x, -5.f);
-    x = std::min(x, 5.f);
+    x *= 10;                // Apply a gain of 10.
+    x = std::max(x, -5.f);  // Clip anything above 5 to 5.
+    x = std::min(x, 5.f);   // Clip anything below -5 to -5.
     return x;
 }
 
+/**
+ * Here we derive a concrete class from OverSamplingShaper.
+ * Our derived class just specifies that dumbChopper will be
+ * the "wave shaper" we want to use.
+ * Not that this particular technique of overriding and abstract function
+ * is not always the best way to do this. We used it here to make the code short and understandable.
+ */
 class MyShaper : public OverSamplingShaper {
 private:
     float processShape(float x) override {
