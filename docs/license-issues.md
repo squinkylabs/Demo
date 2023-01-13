@@ -25,7 +25,7 @@ With all open source projects, you have to think of many of these issues. VCV ad
 
 * The default license terms are that everything in your repo belongs to you, and no-one has any right to re-use it. However you can always state that anyway.
 * Most licenses grant some rights to re-use.
-* It is very common to license code under one set of terms, and graphics under another.
+* It is common to license code under one set of terms, and graphics under another.
 * It is almost impossible to make your license more restrictive once you have published something under permissive terms.
 * There are quite a few libraries that require you to have a license as permissive as theirs. Libsndfile is a classic example.
 * Code licenses are completely separate from trademarks and copyright.
@@ -42,13 +42,13 @@ Above, 1) asks “do you want people to be able to use your code to make their m
 
 If you don’t want to allow that, you don’t have to. But it may limit what third party code you are allowed to use.
 
-Question 2) is more about the look of your module. Often developers don’t want a third party to copy the look of their modules. So it is very common to have a different license for your graphics and panels than for your source code, or to assert a copyright over this visual design.
+Question 2) is more about the look of your module. Often developers don’t want a third party to copy the look of their modules. So it is common to have a different license for your graphics and panels than for your source code, or to assert a copyright over this visual design. On this other hand, a restrictive license for the graphics may make it impossible to have your modules included in a host like Cardinal.
 
 A good example is VCV Rack itself. Note that there is a copyright claimed on the visual design, and it is not permitted for anyone else to build on the design of the core modules. The same is true of the Fundamental modules.
 
 It is difficult to imagine a scenario where you want to grant the right for anyone to re-use your panel designs, and possibly your control designs too. If this is the case, make sure you license does not inadvertently give someone that right. Although if you would like to allow this in the case that you abandon the plugins, you should consider spelling that out in your license.
 
-Regarding 3), again, many developers don’t want someone to take their code and put it in a commercial product. Yet, this has happened in the past and it the main reason that the GNU GPL 3 license is commonly used in modules developed for VCV.
+Regarding 3), again, many developers don’t want someone to take their code and put it in a commercial product. Yet, this happens all the time, and most licenses allow it. Make sure you license addresses this issue in the way you desire.
 
 ## VCV written codes and conventions
 
@@ -65,7 +65,6 @@ In the past, on the issue of “taking over” inactive plugins, Andrew has said
 Since this rule conflicted with the main plugin ethics rule, and has never been used, it has been revoked. So, if a developer wants to take over an abandoned plugin, fork it, and re-release it to the library as is, they must either get explicit approval for that, or run afoul of the plugin ethics rule against copying a plugin.
 
 If you want to ensure that someone is, in fact, able to do this in case of your untimely "demise" (or retirement), it would be cleanest to state this in your license up-front. If, one way or another, you do not grant someone the rights to copy the look of your plugin, they will not be allowed to distribute it via the VCV library.
- main
 
 It’s difficult to tell what these policies mean in reality, but it does suggest that if you care about these issues you should speak to them in your license.
 

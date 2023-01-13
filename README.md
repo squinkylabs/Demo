@@ -18,12 +18,12 @@ New: There are two new modules, FILTER1 and SHAPER1. They are not documented yet
 
 ## Table of contents
 
-1. [Plugin Licensing Issues](./docs/license-issues.md)
-2. [The demo VCOs](./demo-readme.md)
-3. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
-4. [Effect of delays using Host plugin](./docs/host-delay.md)
-5. [Writing efficient plugins](./docs/efficient-plugins.md)
-6. [DC on module outputs](./docs/dc.md)
-7. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
-8. [Comparing FM and Phase Modulation](./docs/fm.md)
-9. [Portable Sequence Format for clipboard](./docs/clipboard-format.md)
+1. [The demo VCOs](./demo-readme.md)
+2. [Writing efficient plugins](./docs/efficient-plugins.md)
+3. [DC on module outputs](./docs/dc.md)
+4. [Measuring aliasing. Deep link into demo VCO documentation](./docs/aliasing2.md)
+5. [Comparing FM and Phase Modulation](./docs/fm.md)
+6. [Portable Sequence Format for clipboard](./docs/clipboard-format.md)
+7. [Effect of delays using Host plugin](./docs/host-delay.md)
+8. [Using the CPU meters in VCV Rack](./docs/cpu-meters.md)
+9. [Plugin Licensing Issues](./docs/license-issues.md)

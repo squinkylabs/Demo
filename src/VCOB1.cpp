@@ -1,7 +1,5 @@
 /**
- * This file contains the entire implementation of the VCO1 demo module.
- * Although it is possible to implement more than one module in a single file,
- * it is rarely done.
+ * This is just an experiment.
  */
 
 #include "Filter6PButter.h"
