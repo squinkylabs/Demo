@@ -25,12 +25,17 @@ struct FILTER1Module : Module
         NUM_LIGHTS
     };
 
+    // This is the actual code to do the filtration. We put it in a different
+    // file so that it could be shared.
+    // The only semi interesting thing about this module is in filter.h.
     Filter6PButter filter;
     FILTER1Module() {
         // Your module must call config from its constructor, passing in
         // how many ins, outs, etc... it has.
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-        //configParam(PITCH_PARAM, 0, 10, 4, "Initial Pitch");
+
+        // We are arbitrarily setting the filter cutoff to fs/ 44.1
+        // At a 44100 sample rate, this would be a 1k cutoff.
         filter.setCutoffFreq(1.f / 44.1f);
     }
 
@@ -39,6 +44,7 @@ struct FILTER1Module : Module
     void process(const ProcessArgs& args) override {
 
         const float input = inputs[INPUT].value;
+        // All we are doing is running the input though our filter.
         const float output = filter.process(input);
         outputs[OUTPUT].value = output;
     }
