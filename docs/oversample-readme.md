@@ -26,7 +26,7 @@ We use IIR Butterworth low pass filters for both the interpolation filter, the o
 
 This is also handy, as the VCV SDK has nice filters in it, but you are pretty much on your own to design them. The Butterworth filter is quite common, so you never know when someone will want to know how to design one.
 
-That said, there are most likely other filters that work "better".
+That said, there are most likely other filters that work "better" for oversampling implementations.
 
 ## Demo Filter1
 
