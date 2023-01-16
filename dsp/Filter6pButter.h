@@ -17,13 +17,13 @@ public:
     //  zero frequency, and 1.0 is the sample rate. Of course in any DSP we can never do things above sample
     //  rate / 2, so this must never be greater than .5.
     //
-    //  2) The VCV biquad let's you set if up by specifying a type of response, a frequency, a "Q", and a gain.
+    //  2) The VCV biquad lets you set it up by specifying a type of response, a frequency, a "Q", and a gain.
     //  we use 1 for the gain, and the caller specifies the cutoff. We tell VCV we want a LOWPASS filter, which
     //  it interprets as "two pole low pass". And we pass in these magic numbers for "Q". There are ways you
     //  could derive these numbers yourself, but they are difficult and error prone is you aren't good at math.
     //  It's much easier to look them up.
     //
-    //  3) here is the online calculator we use to get the Q numbers: https://www.earlevel.com/main/2016/09/29/cascading-filters/
+    //  3) Here is the online calculator we use to get the Q numbers: https://www.earlevel.com/main/2016/09/29/cascading-filters/
     void setCutoffFreq(float normalizedCutoff) {
         assert(normalizedCutoff > 0 && normalizedCutoff < .5f);
         f[0].setParameters(rack::dsp::TBiquadFilter<float>::LOWPASS, normalizedCutoff, .51763809, 1);
@@ -31,7 +31,7 @@ public:
         f[2].setParameters(rack::dsp::TBiquadFilter<float>::LOWPASS, normalizedCutoff, 1.9318517, 1);
     }
 
-    // Process takes one sample of input, and generates on sample of output.
+    // Process takes one sample of input, and generates one sample of output.
     float process(float x) {
         x = f[0].process(x);  // filter input through biquad #1
         x = f[1].process(x);  // filter the output of biquad #1 through biquad #2
@@ -74,7 +74,6 @@ public:
         return x;
     }
   
-    
 private:
     rack::dsp::TBiquadFilter<float> f[6];  // we need 3 biquads to make a 6p bw
 };

@@ -1,5 +1,5 @@
 /**
- * This file contains the entire implementation of the FILTER1 demo module.
+ * This file contains the entire implementation of the Shaper1 demo module.
  */
 #include "OverSamplingShaper.h"
 #include "demo-plugin.hpp"
@@ -19,7 +19,7 @@ float dumbChopper(float x) {
  * Here we derive a concrete class from OverSamplingShaper.
  * Our derived class just specifies that dumbChopper will be
  * the "wave shaper" we want to use.
- * Not that this particular technique of overriding and abstract function
+ * Note that this particular technique of overriding and abstract function
  * is not always the best way to do this. We used it here to make the code short and understandable.
  */
 class MyShaper : public OverSamplingShaper {
@@ -50,6 +50,7 @@ struct SHAPER1Module : Module {
         NUM_LIGHTS
     };
 
+    // Declare an instance of the MyShaper object we declared above.
     MyShaper shaper;
 
     SHAPER1Module() {
@@ -85,7 +86,7 @@ struct SHAPER1Widget : ModuleWidget {
         // children are always higher than children added earlier.
         setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/vco1_panel.svg")));
 
-        // VCV modules usually have image is "screws" to make them
+        // VCV modules usually have images of "screws" to make them
         // look more like physical module. You may design your own screws,
         // or not use screws at all.
         addChild(createWidget<ScrewSilver>(Vec(15, 0)));
@@ -109,7 +110,8 @@ struct SHAPER1Widget : ModuleWidget {
         addOutput(createOutput<PJ301MPort>(Vec(x, outputY), module, SHAPER1Module::DIRTY_OUTPUT));
         addOutput(createOutput<PJ301MPort>(Vec(x, outputY2), module, SHAPER1Module::OVERSAMPLED_OUTPUT));
 
-        // Add some quick hack labels to the panel.
+        // Add some quick hack labels to the panel. In a "real" module you might
+        // Draw this text directly on the panel graphic, as that is more flexible.
         addLabel(Vec(20, headingY), "Demo Shaper 1");
         addLabel(Vec(x - 20, outputY - labelAbove), "Out Dirty");
         addLabel(Vec(x - 1, inputY - labelAbove), "In");

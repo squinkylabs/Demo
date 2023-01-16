@@ -27,8 +27,10 @@ struct FILTER1Module : Module
 
     // This is the actual code to do the filtration. We put it in a different
     // file so that it could be shared.
-    // The only semi interesting thing about this module is in filter.h.
+    // The only semi interesting thing about this module is in filter.h, which is where
+    // Filter6PButter is declared and implemented. 
     Filter6PButter filter;
+
     FILTER1Module() {
         // Your module must call config from its constructor, passing in
         // how many ins, outs, etc... it has.
@@ -67,10 +69,7 @@ struct FILTER1Widget : ModuleWidget {
         // In VCV the Z-order of added children is such that later
         // children are always higher than children added earlier.
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/vco1_panel.svg")));
-
-        // VCV modules usually have image is "screws" to make them
-        // look more like physical module. You may design your own screws, 
-        // or not use screws at all.
+.
 		addChild(createWidget<ScrewSilver>(Vec(15, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 30, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(15, 365)));

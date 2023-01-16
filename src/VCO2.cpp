@@ -231,7 +231,7 @@ struct VCO2Widget : ModuleWidget {
         // children are always higher than children added earlier.
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/vco1_panel.svg")));
 
-        // VCV modules usually have image is "screws" to make them
+        // VCV modules usually have images of "screws" to make them
         // look more like physical module. You may design your own screws, 
         // or not use screws at all.
 		addChild(createWidget<ScrewSilver>(Vec(15, 0)));
