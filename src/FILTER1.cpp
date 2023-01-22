@@ -69,7 +69,6 @@ struct FILTER1Widget : ModuleWidget {
         // In VCV the Z-order of added children is such that later
         // children are always higher than children added earlier.
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/vco1_panel.svg")));
-.
 		addChild(createWidget<ScrewSilver>(Vec(15, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 30, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(15, 365)));
