@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Filter6PButter.h"
+#include "Filter6pButter.h"
 
 // This can be set to any integer greater than 1
 #define OVERSAMPLING_FACTOR 16

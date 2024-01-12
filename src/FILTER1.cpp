@@ -1,8 +1,9 @@
 /**
  * This file contains the entire implementation of the FILTER1 demo module.
  */
+#include "Filter6pButter.h"
 #include "demo-plugin.hpp"
-#include "Filter6PButter.h"
+
 
 /**
  *  Every synth module must have a Module structure.
